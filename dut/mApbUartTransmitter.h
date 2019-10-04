@@ -17,43 +17,41 @@ SC_MODULE (mApbUartTransmitter) {
   // Inputs
   sc_in<bool> pClk;
   sc_in<bool> pResetN;
-  sc_in<sc_uint<8> > ctrlData;
-  sc_in<bool> ctrlEn;
-  sc_in<bool> ctrlTxEn;
   sc_in<bool> ctrlD9;
+  sc_in<bool> ctrlEn;
   sc_in<bool> ctrlEp;
   sc_in<bool> ctrlShiftTx;
+  sc_in<bool> ctrlTxEn;
   sc_in<sc_uint<2> > ctrlTxt;
+  sc_in<sc_uint<8> > ctrlData;
 
   // Outputs
-  sc_out<bool> txNf;
   sc_out<bool> txBusy;
+  sc_out<bool> txNf;
   sc_out<bool> txTxe;
   sc_out<bool> uartTx;    
 
   // Internal signals
-  sc_signal<sc_uint<4> > shiftTxCounter;
-  sc_signal<bool> state;
-  sc_signal<bool> fsmShift;
-  sc_signal<bool> fsmIdle;
-  sc_signal<bool> txShiftComplete;
-  sc_signal<bool> shiftEn;
-  sc_signal<bool> loadData;
   sc_signal<bool> data9;
-  sc_signal<sc_uint<8> > txFifoOut;
-  sc_signal<sc_uint<8> > txMemArray[16];
-  sc_signal<sc_uint<5> > txRptr;
-  sc_signal<sc_uint<5> > txWptr;
-  sc_signal<sc_uint<5> > dataNum;
-  //sc_signal<bool> tx_fifo_ud;
-  //sc_signal<bool> tx_fifo_ov;
+  sc_signal<bool> fsmIdle;
+  sc_signal<bool> fsmShift;
+  sc_signal<bool> loadData;
+  sc_signal<bool> shiftEn;
+  sc_signal<bool> state;
+  sc_signal<bool> txFifoEmpty;
+  sc_signal<bool> txFifoFull;
   sc_signal<bool> txFifoRe;
   sc_signal<bool> txFifoWe;
-  sc_signal<bool> txFifoFull;
-  sc_signal<bool> txFifoEmpty;
-  sc_signal<sc_uint<10> > txShiftReg;
   sc_signal<bool> txParity;
-  sc_signal<bool> txWr;
+  sc_signal<bool> txShiftComplete;
+  sc_signal<bool> TxWr;
+  sc_signal<sc_uint<4> > shiftTxCounter;
+  sc_signal<sc_uint<5> > dataNum;
+  sc_signal<sc_uint<5> > txRptr;
+  sc_signal<sc_uint<5> > txWptr;
+  sc_signal<sc_uint<8> > txFifoOut;
+  sc_signal<sc_uint<8> > txMemArray[16];
+  sc_signal<sc_uint<10> > txShiftReg;
 
   // other variables
   // because of SystemC Restriction
@@ -67,31 +65,12 @@ SC_MODULE (mApbUartTransmitter) {
   void InitReset();
 
   // pcRegisters
-  // CTHREAD contains all Registers
+  // CTHREAD for all Registers
   void pcRegisters();
 
-  // pmOutput_1
-  // METHOD of Outputs, using assignment
-  void pmOutput_1();
-
-  // pmOutput_2
-  // METHOD of Outputs, using swich case
-  void pmOutput_2();
-
-  // pmTxFifoStatus
-  // METHOD of internal signals, which are status of FIFO
-  // and other signals have same sensitive list
-  void pmTxFifoStatus();
-
-  // pmTxFifoControl
-  // METHOD of internal signals, which control FIFO
-  // and other signals have same sensitive list
-  void pmTxFifoControl();
-
-  // pmRegistersControl
-  // METHOD of internal signals, which control CTHREAD Registers
-  // and other signals have same sensitive list
-  void pmRegistersControl();
+  // pmSignals
+  // METHOD for combinational logic
+  void pmSignals();
 
   // Constructor
   SC_CTOR(mApbUartTransmitter) {
@@ -99,43 +78,31 @@ SC_MODULE (mApbUartTransmitter) {
     SC_CTHREAD(pcRegisters, pClk.pos());
       reset_signal_is(pResetN, false);
 
-    SC_METHOD(pmOutput_1);
-      sensitive << txFifoFull;
-      sensitive << txTxeFb;
-      sensitive << txShiftReg;
-      sensitive << fsmIdle;
-
-    SC_METHOD(pmOutput_2);
+    SC_METHOD(pmSignals);
+      sensitive << ctrlD9;
+      sensitive << ctrlEn;
+      sensitive << ctrlEp;
+      sensitive << ctrlShiftTx;
+      sensitive << ctrlTxEn;
       sensitive << ctrlTxt;
       sensitive << dataNum;
-
-    SC_METHOD(pmTxFifoStatus);
-      sensitive << txRptr;
-      sensitive << txWptr;
-      for (bitSelect = 0; bitSelect < 16; bitSelect ++) {
-        sensitive << txMemArray[bitSelect];
-      }
-
-    SC_METHOD(pmTxFifoControl);
+      sensitive << fsmIdle;
+      sensitive << fsmShift;
       sensitive << loadData;
+      sensitive << state;
+      sensitive << shiftTxCounter;
       sensitive << txFifoEmpty;
       sensitive << txFifoFull;
       sensitive << txFifoOut;
-      sensitive << txWr;
-      sensitive << ctrlEp;
-      sensitive << state;
-
-    SC_METHOD(pmRegistersControl);
-      sensitive << ctrlD9;
-      sensitive << ctrlEn;
-      sensitive << ctrlTxEn;
-      sensitive << ctrlShiftTx;
-      sensitive << shiftTxCounter;
       sensitive << txParity;
-      sensitive << txFifoEmpty;
-      sensitive << fsmIdle;
-      sensitive << fsmShift;
-
+      sensitive << txShiftReg;
+      sensitive << txTxeFb;
+      sensitive << txRptr;
+      sensitive << txWptr;
+      sensitive << TxWr;
+      for (bitSelect = 0; bitSelect < 16; bitSelect ++) {
+        sensitive << txMemArray[bitSelect];
+      }
   }
 };
 
