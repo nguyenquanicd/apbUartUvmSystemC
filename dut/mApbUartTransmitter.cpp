@@ -25,14 +25,21 @@ void mApbUartTransmitter::pcRegisters() {
       sc_uint<4> shiftTxCounter_r = shiftTxCounter.read();
       sc_uint<5> txRptr_r         = txRptr.read();
       sc_uint<5> txWptr_r         = txWptr.read();
-      sc_uint<8> > ctrlData_r     = ctrlData.read();
+      sc_uint<8> ctrlData_r     = ctrlData.read();
       sc_uint<8> txFifoOut_r      = txFifoOut.read();
       sc_uint<10> txShiftReg_r    = txShiftReg.read();
       sc_uint<8> txMemArray_r[16];
-      for (bitSelect = 0; bitSelect < 16; bitSelect ++) {
-        txMemArray_r[bitSelect] = txMemArray[bitSelect].read();
+      for (unsigned int i = 0; i < 16; i ++) {
+        txMemArray_r[i] = txMemArray[i].read();
       }
 
+      sc_uint<4> shiftTxCounter_w;
+      sc_uint<10> txShiftReg_w;
+      bool state_w;
+      sc_uint<5> txRptr_w;
+      sc_uint<5> txWptr_w;
+      sc_uint<8> txMemArray_w[16];
+      
       // get value base on control signals
       if (ctrlEn_r == 0) {
         shiftTxCounter_w = 0; //Shift counter
@@ -84,12 +91,11 @@ void mApbUartTransmitter::pcRegisters() {
       }
 
       //memory of TXFIFO
-      sc_uint<8> txMemArray_w[16];
-      for (bitSelect = 0; bitSelect < 16; bitSelect ++) {
-        if ((txFifoWe_r == 1) && (bitSelect == txWptr_r.range(3,0))) {
-          txMemArray_w[bitSelect] = ctrlData_r;
+      for (unsigned int i = 0; i < 16; i ++) {
+        if ((txFifoWe_r == 1) && (i == txWptr_r.range(3,0))) {
+          txMemArray_w[i] = ctrlData_r;
         } else {
-          txMemArray_w[bitSelect] = txMemArray_r[bitSelect];
+          txMemArray_w[i] = txMemArray_r[i];
         }
       }
 
@@ -99,8 +105,8 @@ void mApbUartTransmitter::pcRegisters() {
       state.write(state_w); //FSM tcreates fsmShift and fsmIdle signals
       txRptr.write(txRptr_w); //Read pointer
       txWptr.write(txWptr_w); //Write pointer
-      for (bitSelect = 0; bitSelect < 16; bitSelect ++) { //memory of TXFIFO
-        txMemArray[bitSelect].write(txMemArray_w[bitSelect]);
+      for (unsigned int i = 0; i < 16; i ++) { //memory of TXFIFO
+        txMemArray[i].write(txMemArray_w[i]);
       }
       
       wait();
@@ -132,8 +138,8 @@ void mApbUartTransmitter::pmSignals() {
   sc_uint<8> txFifoOut_r      = txFifoOut.read();
   sc_uint<10> txShiftReg_r    = txShiftReg.read();
   sc_uint<8> txMemArray_r[16];
-  for (bitSelect = 0; bitSelect < 16; bitSelect ++) {
-   txMemArray_r[bitSelect] = txMemArray[bitSelect].read();
+  for (unsigned int j = 0; j < 16; j ++) {
+   txMemArray_r[j] = txMemArray[j].read();
   }
 
   //

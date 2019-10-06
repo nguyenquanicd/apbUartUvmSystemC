@@ -54,9 +54,7 @@ SC_MODULE (mApbUartTransmitter) {
   sc_signal<sc_uint<10> > txShiftReg;
 
   // other variables
-  // because of SystemC Restriction
   sc_signal<bool> txTxeFb;
-  sc_uint<4> bitSelect;
 
   // Process declaration
   //
@@ -100,8 +98,8 @@ SC_MODULE (mApbUartTransmitter) {
       sensitive << txRptr;
       sensitive << txWptr;
       sensitive << TxWr;
-      for (bitSelect = 0; bitSelect < 16; bitSelect ++) {
-        sensitive << txMemArray[bitSelect];
+      for (unsigned int k = 0; k < 16; k ++) {
+        sensitive << txMemArray[k];
       }
   }
 };
