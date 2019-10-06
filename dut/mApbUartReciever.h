@@ -1,10 +1,9 @@
-
 //--------------------------------------
-//Project: Simple CPU
-//Module:  Decoder - body file
-//Function: Decoder
-//Author:  Truong Cong Hoang Viet
-//Page:    VLSI Technology
+//Project:  The UVM environemnt for UART (Universal Asynchronous Receiver Transmitter)
+//Module:   mApbUartReciever
+//Function: Receive the serial data follow UART protocol
+//Author:   Truong Cong Hoang Viet
+//Page:     VLSI Technology
 //--------------------------------------
 //
 //MEMORY
@@ -29,13 +28,14 @@ SC_MODULE(mApbUartReciever) {
 	sc_out<bool>	   rxBusy;
 
 	sc_out<bool>	   rxRxf;
-	sc_signal<bool>    rxRxfReg;
 
 	sc_out<bool>	    rxOv;
 	sc_out<bool>	    rxPe;
 	sc_out<bool>	    rxFe;
 	sc_out<sc_uint<8> > rxData; 
 
+  sc_signal<bool>    rxRxfReg;
+  
 	sc_signal<bool>        setSampleCounter;
 	sc_signal<sc_uint<4> > sampleCounter;
 	sc_signal<bool>        fsmActive;
