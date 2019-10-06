@@ -98,8 +98,8 @@ SC_MODULE (mApbUartTransmitter) {
       sensitive << txRptr;
       sensitive << txWptr;
       sensitive << TxWr;
-      for (unsigned int k = 0; k < 16; k ++) {
-        sensitive << txMemArray[k];
+      for (unsigned int i = 0; i < 16; i ++) {
+        sensitive << txMemArray[i];
       }
   }
 };

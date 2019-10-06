@@ -29,10 +29,9 @@ void mApbUartTransmitter::pcRegisters() {
       sc_uint<8> txFifoOut_r      = txFifoOut.read();
       sc_uint<10> txShiftReg_r    = txShiftReg.read();
       sc_uint<8> txMemArray_r[16];
-      for (unsigned int i = 0; i < 16; i ++) {
-        txMemArray_r[i] = txMemArray[i].read();
-      }
+      txMemArray_r[txFifoWe_r] = txMemArray[txFifoWe_r].read();
 
+      // Output prepare
       sc_uint<4> shiftTxCounter_w;
       sc_uint<10> txShiftReg_w;
       bool state_w;
@@ -91,13 +90,12 @@ void mApbUartTransmitter::pcRegisters() {
       }
 
       //memory of TXFIFO
-      for (unsigned int i = 0; i < 16; i ++) {
-        if ((txFifoWe_r == 1) && (i == txWptr_r.range(3,0))) {
-          txMemArray_w[i] = ctrlData_r;
-        } else {
-          txMemArray_w[i] = txMemArray_r[i];
-        }
+      if (txFifoWe_r == 1) {
+        txMemArray_w[txWptr_r] = ctrlData_r;
+      } else {
+        txMemArray_w[txWptr_r] = txMemArray_r[txWptr_r];
       }
+
 
       // write ports
       shiftTxCounter.write(shiftTxCounter_w); //Shift counter
@@ -105,9 +103,7 @@ void mApbUartTransmitter::pcRegisters() {
       state.write(state_w); //FSM tcreates fsmShift and fsmIdle signals
       txRptr.write(txRptr_w); //Read pointer
       txWptr.write(txWptr_w); //Write pointer
-      for (unsigned int i = 0; i < 16; i ++) { //memory of TXFIFO
-        txMemArray[i].write(txMemArray_w[i]);
-      }
+      txMemArray[txWptr_r].write(txMemArray_w[txWptr_r]); //memory of TXFIFO
       
       wait();
     }
@@ -138,9 +134,7 @@ void mApbUartTransmitter::pmSignals() {
   sc_uint<8> txFifoOut_r      = txFifoOut.read();
   sc_uint<10> txShiftReg_r    = txShiftReg.read();
   sc_uint<8> txMemArray_r[16];
-  for (unsigned int j = 0; j < 16; j ++) {
-   txMemArray_r[j] = txMemArray[j].read();
-  }
+  txMemArray_r[txRptr_r] = txMemArray[txRptr_r].read();
 
   //
   bool txBusy_w = ~(fsmIdle_r & txTxeFb_r);
@@ -177,7 +171,7 @@ void mApbUartTransmitter::pmSignals() {
   bool txFifoEmpty_w     = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] == txWptr_r[4]);
   bool txFifoFull_w      = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] != txWptr_r[4]);
   sc_uint<5> dataNum_w   = txWptr_r - txRptr_r;
-  sc_uint<8> txFifoOut_w = txMemArray_r[txRptr_r.range(3,0)];
+  sc_uint<8> txFifoOut_w = txMemArray_r[txRptr_r];
   
   txFifoEmpty.write(txFifoEmpty_w);
   txFifoFull.write(txFifoFull_w);
