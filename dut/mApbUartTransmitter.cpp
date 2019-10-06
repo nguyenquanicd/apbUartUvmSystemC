@@ -25,11 +25,10 @@ void mApbUartTransmitter::pcRegisters() {
       sc_uint<4> shiftTxCounter_r = shiftTxCounter.read();
       sc_uint<5> txRptr_r         = txRptr.read();
       sc_uint<5> txWptr_r         = txWptr.read();
-      sc_uint<8> ctrlData_r     = ctrlData.read();
+      sc_uint<8> ctrlData_r       = ctrlData.read();
+      sc_uint<8> txMemArray_r     = txMemArray[txWptr_r].read();
       sc_uint<8> txFifoOut_r      = txFifoOut.read();
       sc_uint<10> txShiftReg_r    = txShiftReg.read();
-      sc_uint<8> txMemArray_r[16];
-      txMemArray_r[txFifoWe_r] = txMemArray[txFifoWe_r].read();
 
       // Output prepare
       sc_uint<4> shiftTxCounter_w;
@@ -93,7 +92,7 @@ void mApbUartTransmitter::pcRegisters() {
       if (txFifoWe_r == 1) {
         txMemArray_w[txWptr_r] = ctrlData_r;
       } else {
-        txMemArray_w[txWptr_r] = txMemArray_r[txWptr_r];
+        txMemArray_w[txWptr_r] = txMemArray_r;
       }
 
 
@@ -131,10 +130,9 @@ void mApbUartTransmitter::pmSignals() {
   sc_uint<5> dataNum_r        = dataNum.read();
   sc_uint<5> txRptr_r         = txRptr.read();
   sc_uint<5> txWptr_r         = txWptr.read();
+  sc_uint<8> txMemArray_r     = txMemArray[txRptr_r].read();
   sc_uint<8> txFifoOut_r      = txFifoOut.read();
   sc_uint<10> txShiftReg_r    = txShiftReg.read();
-  sc_uint<8> txMemArray_r[16];
-  txMemArray_r[txRptr_r] = txMemArray[txRptr_r].read();
 
   //
   bool txBusy_w = ~(fsmIdle_r & txTxeFb_r);
@@ -171,7 +169,7 @@ void mApbUartTransmitter::pmSignals() {
   bool txFifoEmpty_w     = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] == txWptr_r[4]);
   bool txFifoFull_w      = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] != txWptr_r[4]);
   sc_uint<5> dataNum_w   = txWptr_r - txRptr_r;
-  sc_uint<8> txFifoOut_w = txMemArray_r[txRptr_r];
+  sc_uint<8> txFifoOut_w = txMemArray_r;
   
   txFifoEmpty.write(txFifoEmpty_w);
   txFifoFull.write(txFifoFull_w);
