@@ -4,7 +4,6 @@ void mApbUartReciever::for_wait() {
 	wait();
 }
 
-
 void mApbUartReciever::pcProcess(){
     // Input
 	bool ctrlEn_;
@@ -152,7 +151,6 @@ void mApbUartReciever::pcProcess(){
 
 		// Write pointer RxWptr
 
-
 		if (ctrlEn_ == 0) {
 			RxWptr_o = RxRptr_; //Clear FIFO by assigning wptr = rprt
 		}
@@ -164,7 +162,6 @@ void mApbUartReciever::pcProcess(){
 				//RxWptr_ = RxWptr_;
 			}
 		}
-
 
         //Memory array of RXFIFO
 		if (RxFifoWe_ == 1) {
@@ -180,16 +177,12 @@ void mApbUartReciever::pcProcess(){
 			}
 
 
-
 		if (RxFifoRe_ == 1) {
 			RxRptr_ = RxRptr_ + 1;
 		}
 		else {
 			//RxRptr_ = RxRptr_;
 		}
-
-		
-
 
 		// output
         rxRptr.write(RxRptr_o);
@@ -205,8 +198,6 @@ void mApbUartReciever::pcProcess(){
 	}
 
 }
-
-
 
 void mApbUartReciever::pmProcess(){
 	sc_uint<4> sampleCounter_;
