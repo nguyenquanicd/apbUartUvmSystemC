@@ -17,7 +17,7 @@ void mApbUartReciever::for_wait() {
 void mApbUartReciever::pcProcess(){
     
     // Output variable of process
-	bool setsampleCounter_o;
+	bool SetSampleCounter_o;
 	bool RxComplete_o;
 	bool WrRxRifo_o;
 	bool RxFifoFull_o;
@@ -29,7 +29,7 @@ void mApbUartReciever::pcProcess(){
 	bool UartRx_o;
 	bool RxFifoRe_o;
 	sc_uint<4> RxCounterBit_o;
-	sc_uint<4> sampleCounter_o;
+	sc_uint<4> SampleCounter_o;
 	sc_uint<10> RxShiftReg_o;
 	sc_uint<5> RxWptr_o;
 	sc_uint<5> RxRptr_o;
@@ -61,7 +61,6 @@ void mApbUartReciever::pcProcess(){
 		bool RxShiftEn_			= rxShiftEn.read();
 		bool UartRx_			= uartRx.read();
 		bool setsampleCounter_	= setSampleCounter.read();
-		bool RxComplete_		= rxComplete.read();
 		bool RxFifoWe_			= rxFifoWe.read();
 		bool RxComplete_		= rxComplete.read();
 		bool UartSync_			= uartRx.read();
@@ -71,20 +70,19 @@ void mApbUartReciever::pcProcess(){
 		sc_uint<5>	RxRptr_			= rxRptr.read();
 		sc_uint<2>	rxNextState_	= rxNextState.read();
 		sc_uint<10>	DataInRxFifo_	= dataInRxFifo.read();
-		sc_uint<5>	RxRptr_			= rxRptr.read();
-		sc_uint<4> RxCounterBit_	= rxCounterBit.read();
+		sc_uint<4>  RxCounterBit_	= rxCounterBit.read();
 
 		//Sampler counter: determine the sampled position of a bit
 		if (CtrlEn_ == 0) {
-			sampleCounter_o = 0;
+			SampleCounter_o = 0;
 		}
 		else {
 			switch (setsampleCounter_ << 1 | RxComplete_){
 			case 0x01:
-				sampleCounter_o = 0;
+				SampleCounter_o = 0;
 				break;
 			case 0x02:
-				sampleCounter_o = sampleCounter_ + 1;
+				SampleCounter_o = sampleCounter_ + 1;
 				break;
 			default:
 				break;
@@ -165,7 +163,7 @@ void mApbUartReciever::pcProcess(){
 		rxFifoOv.write(RxFifoOv_o);
 		rxCounterBit.write(RxCounterBit_o);
 		ffSync.write(FfSync_o);
-		sampleCounter.write(sampleCounter_o); 
+		sampleCounter.write(SampleCounter_o); 
 		rxShiftReg.write(RxShiftReg_o);
 		rxWptr.write(RxWptr_o);
 		rxCurrentState.write(RxNextState_o);
@@ -179,34 +177,32 @@ void mApbUartReciever::pmProcess(){
     // Output value of process
 	bool RxShiftEn_o;
 	bool RxComplete_o;
-	bool ctrlD9_o;
+	bool CtrlD9_o;
 	bool UartSync_o;
 	bool RxFifoFull_o;
 	bool RxFifoWe_o;
 	bool WrRxRifo_o;
 	bool RdRxFifo_o;
-	bool ctrlDataRd_o;
+	bool CtrlDataRd_o;
 	bool RxFifoRe_o;
-	bool ctrlEp_o;
+	bool CtrlEp_o;
 	bool FrameError_o;
 	bool ParityError_o;
-	bool rxNe_o;
-	bool rxOv_o;
+	bool RxNe_o;
+	bool RxOv_o;
 	bool RxFifoOv_o;
-	bool rxPe_o;
-	bool rxFe_o;
+	bool RxPe_o;
+	bool RxFe_o;
 	bool RxFifoEmplty_o;
 	bool LsbRxfifoEqual_o;
 	bool MsbRxfifoDiff_o;
-	bool rxFifoFull_o;
-	bool rxFifoEmplty_o;
-	bool rxRxf_o;
-	bool FsmStart_o ;
-	bool FsmShift_o ;
+	bool RxRxf_o;
+	bool FsmStart_o;
+	bool FsmShift_o;
 	bool FsmActive_o;
-	bool ctrlShiftRx_o;
-	bool setsampleCounter_o;
-    sc_uint<4>	sampleCounter_o;
+	bool CtrlShiftRx_o;
+	bool SetSampleCounter_o;
+    sc_uint<4>	SampleCounter_o;
 	sc_uint<4>	RxCounterBit_o;
 	sc_uint<2>	FfSync_o;
 	sc_uint<2>	RxCurrentState_o;
@@ -223,7 +219,7 @@ void mApbUartReciever::pmProcess(){
 
 	// Read value of input and signal
 	bool FsmActive_		 = fsmActive.read();
-	bool ctrlShiftRx_	 = ctrlShiftRx.read();
+	bool CtrlShiftRx_	 = ctrlShiftRx.read();
 	bool FsmStart_		 = fsmStart.read();
 	bool FsmShift_		 = fsmShift.read();
 	bool CtrlD9_		 = ctrlD9.read();
@@ -231,13 +227,13 @@ void mApbUartReciever::pmProcess(){
 	bool RxComplete_	 = rxComplete.read();
 	bool RxShiftEn_		 = rxShiftEn.read();
 	bool RxFifoFull_	 = rxFifoFull.read();
-	bool ctrlDataRd_	 = ctrlDataRd.read();
+	bool CtrlDataRd_	 = ctrlDataRd.read();
 	bool RxFifoEmplty_	 = rxFifoEmplty.read();
-	bool ctrlEp_		 = ctrlEp.read();
+	bool CtrlEp_		 = ctrlEp.read();
 	bool RxFifoOv_		 = rxFifoOv.read();
 	bool ParityError_	 = parityError.read();
 	bool FrameError_	 = frameError.read();
-	bool rxNe_			 = rxNe.read();
+	bool RxNe_			 = rxNe.read();
 	bool MsbRxfifoDiff_	 = msbRxfifoDiff.read();
 	bool LsbRxfifoEqual_ = lsbRxfifoEqual.read();
 
@@ -256,12 +252,12 @@ void mApbUartReciever::pmProcess(){
 	////////////////////////////////////////////////////////
     
 	//Sampler counter: determine the sampled position of a bit
-		setsampleCounter_o = FsmActive_ & ctrlShiftRx_;		
-		FsmActive_o = FsmStart_ | FsmShift_;
+		SetSampleCounter_o = FsmActive_ & CtrlShiftRx_;
+		FsmActive_o 	   = FsmStart_ | FsmShift_;
 
 	//Shift enable
 
-		RxShiftEn_o = ctrlShiftRx_ & (sampleCounter_ == 7);
+		RxShiftEn_o  = CtrlShiftRx_ & (sampleCounter_ == 7);
 	//Complete a received frame when all bits are sampled
 	//Non-parity: START - 8 data bits - STOP
 	//Parity: START - 8 data bits - Parity bit - STOP
@@ -288,7 +284,7 @@ void mApbUartReciever::pmProcess(){
 		case CHECK_START:
 			FsmStart_o = 1;
 			FsmShift_o = 0;
-			if (ctrlShiftRx_ && UartSync_) {
+			if (CtrlShiftRx_ && UartSync_) {
 				RxNextState_o = IDLE_RX;
 			}
 			else if (RxShiftEn_) {
@@ -320,25 +316,25 @@ void mApbUartReciever::pmProcess(){
 		WrRxRifo_o		= RxComplete_;
 		DataIn_o		= (CtrlD9_) ? RxShiftReg_.range(7, 0) : RxShiftReg_(8, 1);
 		DataInRxFifo_o	= (FrameError_ << 9) | (ParityError_ << 8) | DataIn_;
-		RdRxFifo_o		= ctrlDataRd_;
+		RdRxFifo_o		= CtrlDataRd_;
 		FrameError_o	= !RxShiftReg_[9];  // frame error	
-		ParityError_o	= (ctrlEp_) ? RxShiftReg_.xor_reduce() : !RxShiftReg_.xor_reduce(); // parity error
-		RxFifoRe_o = ctrlDataRd_ & (!RxFifoEmplty_);
+		ParityError_o	= (CtrlEp_) ? RxShiftReg_.xor_reduce() : !RxShiftReg_.xor_reduce(); // parity error
+		RxFifoRe_o = CtrlDataRd_ & (!RxFifoEmplty_);
 		RxFifoWe_o = RxComplete_ & (!RxFifoFull_);
 
 	//Outputs of FIFO
-		rxOv_o = RxFifoOv_;
-		rxNe_o = !RxFifoEmplty_;   // fifo not empty status flag
+		RxOv_o = RxFifoOv_;
+		RxNe_o = !RxFifoEmplty_;   // fifo not empty status flag
 		switch (CtrlRxt_) {
-		case 0x0: rxRxf_o = RxFifoFull_;
+		case 0x0: RxRxf_o = RxFifoFull_;
 			break;
-		case 0x1: rxRxf_o = (RxFifoPtrCompare_ >= 8);
-			break;
-
-		case 0x2: rxRxf_o = (RxFifoPtrCompare_ >= 4);
+		case 0x1: RxRxf_o = (RxFifoPtrCompare_ >= 8);
 			break;
 
-		case 0x3: rxRxf_o = (RxFifoPtrCompare_ >= 2);
+		case 0x2: RxRxf_o = (RxFifoPtrCompare_ >= 4);
+			break;
+
+		case 0x3: RxRxf_o = (RxFifoPtrCompare_ >= 2);
 			break;
 
 		default:
@@ -349,12 +345,12 @@ void mApbUartReciever::pmProcess(){
 		LsbRxfifoEqual_o	= (RxWptr_ == RxRptr_);
 		MsbRxfifoDiff_o		= RxWptr_[4] ^ RxRptr_[4];
 		RxFifoPtrCompare_o  = RxWptr_ - RxRptr_;
-		rxFifoFull_o		= MsbRxfifoDiff_ & LsbRxfifoEqual_;
-		rxFifoEmplty_o		= (!MsbRxfifoDiff_) & LsbRxfifoEqual_;
+		RxFifoFull_o		= MsbRxfifoDiff_ & LsbRxfifoEqual_;
+		RxFifoEmplty_o		= (!MsbRxfifoDiff_) & LsbRxfifoEqual_;
     
     // Output of fifo
-		rxPe_o		= rxNe_ & RxFifoDataOut_[8];
-		rxFe_o		= rxNe_ & RxFifoDataOut_[9];
+		RxPe_o		= RxNe_ & RxFifoDataOut_[8];
+		RxFe_o		= RxNe_ & RxFifoDataOut_[9];
 		RxData_o	= RxFifoDataOut_;
     ////////////////////////////////////////////////////////////
     
@@ -362,10 +358,10 @@ void mApbUartReciever::pmProcess(){
 	// Signal and register
 	rxFifoDataOut.write(RxFifoDataOut_o);
 	fsmActive.write(FsmActive_o);
-	setSampleCounter.write(setsampleCounter_o);
+	setSampleCounter.write(SetSampleCounter_o);
 	rxFifoPtrCompare.write(RxFifoPtrCompare_o);
-	rxFifoFull.write(rxFifoFull_o);
-	rxFifoEmplty.write(rxFifoEmplty_o);
+	rxFifoFull.write(RxFifoFull_o);
+	rxFifoEmplty.write(RxFifoEmplty_o);
 	lsbRxfifoEqual.write(LsbRxfifoEqual_o);
 	msbRxfifoDiff.write(MsbRxfifoDiff_o);
 	dataInRxFifo.write(DataInRxFifo_o);
@@ -385,11 +381,11 @@ void mApbUartReciever::pmProcess(){
 
 	// Output port
 	rxBusy.write(FsmActive_o); 
-	rxPe.write(rxPe_o);
-	rxFe.write(rxFe_o);
+	rxPe.write(RxPe_o);
+	rxFe.write(RxFe_o);
 	rxData.write(RxData_o);
-	rxRxf.write(rxRxf_o);
-	rxOv.write(rxOv_o);
-	rxNe.write(rxNe_o);
+	rxRxf.write(RxRxf_o);
+	rxOv.write(RxOv_o);
+	rxNe.write(RxNe_o);
 }
 
