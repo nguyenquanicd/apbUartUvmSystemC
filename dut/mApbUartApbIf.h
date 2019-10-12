@@ -70,7 +70,6 @@ SC_MODULE (mApbUartApbIf) {
   sc_signal< bool > conWe;
   sc_signal< bool > seWe;
   sc_signal< bool > brWe;
-  sc_signal< bool > dtWe;
   sc_signal< bool > ieWe;
   sc_signal< sc_uint<4> > conReg;
   sc_signal< sc_uint<3> > seReg;
@@ -79,6 +78,7 @@ SC_MODULE (mApbUartApbIf) {
   sc_signal< sc_uint<8> > rxCounter;
   sc_signal< sc_uint<4> > txCounter;
   sc_signal< bool > errCondition;
+  sc_signal< bool > ctrlShiftRxTmp;
   //
   // Process declaration
   // RESET
