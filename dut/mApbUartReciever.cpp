@@ -169,7 +169,6 @@ void mApbUartReciever::pcProcess(){
 		rxCurrentState.write(RxNextState_o);
 		for_wait();
 	}
-
 }
 
 void mApbUartReciever::pmProcess(){
@@ -236,7 +235,6 @@ void mApbUartReciever::pmProcess(){
 	bool RxNe_			 = rxNe.read();
 	bool MsbRxfifoDiff_	 = msbRxfifoDiff.read();
 	bool LsbRxfifoEqual_ = lsbRxfifoEqual.read();
-
 	sc_uint<4>	sampleCounter_		= sampleCounter.read();
 	sc_uint<2>	RxCurrentState_		= rxCurrentState.read();
 	sc_uint<4>	RxCounterBit_		= rxCounterBit.read();
@@ -256,7 +254,6 @@ void mApbUartReciever::pmProcess(){
 		FsmActive_o 	   = FsmStart_ | FsmShift_;
 
 	//Shift enable
-
 		RxShiftEn_o  = CtrlShiftRx_ & (sampleCounter_ == 7);
 	//Complete a received frame when all bits are sampled
 	//Non-parity: START - 8 data bits - STOP
@@ -279,7 +276,6 @@ void mApbUartReciever::pmProcess(){
 			else {
 				RxNextState_o = RxCurrentState_;
 			}
-
 			break;
 		case CHECK_START:
 			FsmStart_o = 1;
