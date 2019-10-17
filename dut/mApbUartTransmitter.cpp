@@ -26,83 +26,69 @@ void mApbUartTransmitter::pcRegisters() {
       sc_uint<5> txRptr_r         = txRptr.read();
       sc_uint<5> txWptr_r         = txWptr.read();
       sc_uint<8> ctrlData_r       = ctrlData.read();
-      sc_uint<8> txMemArray_r     = txMemArray[txWptr_r].read();
       sc_uint<8> txFifoOut_r      = txFifoOut.read();
       sc_uint<10> txShiftReg_r    = txShiftReg.read();
-
-      // Output prepare
-      sc_uint<4> shiftTxCounter_w;
-      sc_uint<10> txShiftReg_w;
-      bool state_w;
-      sc_uint<5> txRptr_w;
+      
+      // Write pointer declare
       sc_uint<5> txWptr_w;
-      sc_uint<8> txMemArray_w[16];
       
       // get value base on control signals
       if (ctrlEn_r == 0) {
-        shiftTxCounter_w = 0; //Shift counter
-        txShiftReg_w     = 0x3FF; //Transmit shift register
-        state_w          = IDLE; //FSM tcreates fsmShift and fsmIdle signals
-        txRptr_w         = txWptr_r; //Read pointer
-        txWptr_w         = 0; //Write pointer
+        shiftTxCounter.write(0); // Shift counter
+        txShiftReg.write(0x3FF); // Transmit shift register
+        state.write(IDLE);       // FSM tcreates fsmShift and fsmIdle signals
+        txRptr.write(txWptr_r);  // Read pointer
+        txWptr_w = 0;            // Write pointer
       } else {
-        //Shift counter
+        // Shift counter
         if (txShiftComplete_r == 1) {
-          shiftTxCounter_w = 0;
+          shiftTxCounter.write(0);
         } else if (shiftEn_r == 1) {
-            shiftTxCounter_w = shiftTxCounter_r + 1;
+            shiftTxCounter.write((shiftTxCounter_r + 1));
         } else {
-            shiftTxCounter_w = shiftTxCounter_r;
+            shiftTxCounter.write(shiftTxCounter_r);
         }
         
-        //Transmit shift register
+        // Transmit shift register
         if ((loadData_r == 1) && (shiftEn_r == 0)) {
-          txShiftReg_w = (data9_r, txFifoOut_r, 0b0);
+          txShiftReg.write((data9_r, txFifoOut_r, 0b0));
         } else if ((loadData_r == 0) && (shiftEn_r == 1)) {
-            txShiftReg_w = (0b1, txShiftReg_r.range(9,1));
+            txShiftReg.write((0b1, txShiftReg_r.range(9,1)));
         } else {
-            txShiftReg_w = txShiftReg_r;
+            txShiftReg.write(txShiftReg_r);
         }
         
-        //FSM tcreates fsmShift and fsmIdle signals
+        // FSM tcreates fsmShift and fsmIdle signals
         if ((state_r == IDLE) && (loadData_r == 1)) {
-          state_w = TXSHIFT;
+          state.write(TXSHIFT);
         } else if ((state_r == TXSHIFT) && (txShiftComplete_r == 1)) {
-            state_w = IDLE;
+            state.write(IDLE);
         } else {
-            state_w = state_r;
+            state.write(state_r);
         }
         
-        //Read pointer
+        // Read pointer
         if (txFifoRe_r == 1) {
-          txRptr_w = txRptr_r + 1;
+          txRptr.write((txRptr_r + 1));
         } else {
-            txRptr_w = txRptr_r;
+            txRptr.write(txRptr_r);
         }
       
-        //Write pointer
+        // Write pointer
         if (txFifoWe_r == 1) {
           txWptr_w = txWptr_r + 1;
         } else {
             txWptr_w = txWptr_r;
         }
       }
-
-      //memory of TXFIFO
+      
+      // Write pointer out
+      txWptr.write(txWptr_w);
+      
+      // memory of TXFIFO
       if (txFifoWe_r == 1) {
-        txMemArray_w[txWptr_r] = ctrlData_r;
-      } else {
-        txMemArray_w[txWptr_r] = txMemArray_r;
+        txMemArray[txWptr_w] = ctrlData_r;
       }
-
-
-      // write ports
-      shiftTxCounter.write(shiftTxCounter_w); //Shift counter
-      txShiftReg.write(txShiftReg_w); //Transmit shift register
-      state.write(state_w); //FSM tcreates fsmShift and fsmIdle signals
-      txRptr.write(txRptr_w); //Read pointer
-      txWptr.write(txWptr_w); //Write pointer
-      txMemArray[txWptr_r].write(txMemArray_w[txWptr_r]); //memory of TXFIFO
       
       wait();
     }
@@ -116,34 +102,26 @@ void mApbUartTransmitter::pmSignals() {
   bool ctrlEp_r      = ctrlEp.read();
   bool ctrlShiftTx_r = ctrlShiftTx.read();
   bool ctrlTxEn_r    = ctrlTxEn.read();
-  bool fsmIdle_r     = fsmIdle.read();
-  bool fsmShift_r    = fsmShift.read();
-  bool loadData_r    = loadData.read();
   bool state_r       = state.read();
-  bool txFifoEmpty_r = txFifoEmpty.read();
-  bool txFifoFull_r  = txFifoFull.read();
-  bool txParity_r    = txParity.read();
-  bool txTxeFb_r     = txTxeFb.read();
-  bool TxWr_r        = TxWr.read();
   sc_uint<2> ctrlTxt_r        = ctrlTxt.read();
   sc_uint<4> shiftTxCounter_r = shiftTxCounter.read();
-  sc_uint<5> dataNum_r        = dataNum.read();
   sc_uint<5> txRptr_r         = txRptr.read();
   sc_uint<5> txWptr_r         = txWptr.read();
-  sc_uint<8> txMemArray_r     = txMemArray[txRptr_r].read();
-  sc_uint<8> txFifoOut_r      = txFifoOut.read();
   sc_uint<10> txShiftReg_r    = txShiftReg.read();
 
-  //
-  bool txBusy_w = ~(fsmIdle_r & txTxeFb_r);
-  bool txNf_w   = ~txFifoFull_r;
-  bool uartTx_w = txShiftReg_r[0];
-  
-  txBusy.write(txBusy_w);
-  txNf.write(txNf_w);
-  uartTx.write(uartTx_w);
-
-  //
+  // 1st intermediate value
+  bool fsmShift_w = state_r;
+  bool fsmIdle_w  = ~state_r;
+  bool txFifoEmpty_w     = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] == txWptr_r[4]);
+  bool txFifoFull_w      = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] != txWptr_r[4]);
+  bool txWr_w            = ctrlEn_r & ctrlTxEn_r;
+  sc_uint<8> txFifoOut_w = txMemArray[txRptr_r];
+  // 2nd intermediate value
+  bool txParity_w        = (ctrlEp_r == 1) ? ~txFifoOut_w.xor_reduce() : txFifoOut_w.xor_reduce();
+  bool loadData_w        = ctrlShiftTx_r & ~txFifoEmpty_w & fsmShift_w;  
+  // complex assign
+  bool data9_w           = (ctrlD9_r == 1) ? txParity_r : 0b1;
+  bool txShiftComplete_w = (ctrlD9_r == 1) ? (shiftTxCounter_r == 0xA) : (shiftTxCounter_r == 0x9);
   bool txTxe_w;
   switch (ctrlTxt_r) {
 	  case 0: 
@@ -162,45 +140,26 @@ void mApbUartTransmitter::pmSignals() {
       txTxe_w = 0;
       break;
 	}
-  txTxe.write(txTxe_w);
-  txTxeFb.write(txTxe_w);
-
-  //
-  bool txFifoEmpty_w     = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] == txWptr_r[4]);
-  bool txFifoFull_w      = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] != txWptr_r[4]);
-  sc_uint<5> dataNum_w   = txWptr_r - txRptr_r;
-  sc_uint<8> txFifoOut_w = txMemArray_r;
   
-  txFifoEmpty.write(txFifoEmpty_w);
-  txFifoFull.write(txFifoFull_w);
-  dataNum.write(dataNum_w);
-  txFifoOut.write(txFifoOut_w);
-
-  //
-  bool fsmIdle_w  = ~state_r;
-  bool fsmShift_w = state_r;
-  bool txParity_w = (ctrlEp_r == 1) ? ~txFifoOut_r.xor_reduce() : txFifoOut_r.xor_reduce();
-  bool txFifoRe_w = loadData_r & ~txFifoEmpty_r;
-  bool txFifoWe_w = TxWr_r & ~txFifoFull_r;
-
+  // Signal written
+  data9.write(data9_w);
+  dataNum.write(txWptr_r - txRptr_r);
   fsmIdle.write(fsmIdle_w);
   fsmShift.write(fsmShift_w);
-  txParity.write(txParity_w);
-  txFifoRe.write(txFifoRe_w);
-  txFifoWe.write(txFifoWe_w);
-
-  //
-  bool data9_w           = (ctrlD9_r == 1) ? txParity_r : 0b1;
-  bool loadData_w        = ctrlShiftTx_r & ~txFifoEmpty_r & fsmIdle_r;
-  bool shiftEn_w         = fsmShift_r & ctrlShiftTx_r;
-  bool txShiftComplete_w = (ctrlD9_r == 1) ? (shiftTxCounter_r == 0xA) : (shiftTxCounter_r == 0x9);
-  bool TxWr_w            = ctrlEn_r & ctrlTxEn_r;
-
-  data9.write(data9_w);
   loadData.write(loadData_w);
-  shiftEn.write(shiftEn_w);
+  shiftEn.write((fsmShift_w & ctrlShiftTx_r));
+  txBusy.write(~(fsmIdle_w & txTxe_w));
+  txFifoEmpty.write(txFifoEmpty_w);
+  txFifoFull.write(txFifoFull_w);
+  txFifoOut.write(txFifoOut_w);
+  txFifoRe.write((loadData_w & ~txFifoEmpty_w));
+  txFifoWe.write((txWr_w & ~txFifoFull_w));
+  txNf.write(~txFifoFull_w);
+  txParity.write(txParity_w);
   txShiftComplete.write(txShiftComplete_w);
-  TxWr.write(TxWr_w);
+  txTxe.write(txTxe_w);
+  txWr.write(txWr_w);
+  uartTx.write(txShiftReg_r[0]);
 }
 
 // Initialize value of Registers

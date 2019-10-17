@@ -44,18 +44,17 @@ SC_MODULE (mApbUartTransmitter) {
   sc_signal<bool> txFifoWe;
   sc_signal<bool> txParity;
   sc_signal<bool> txShiftComplete;
-  sc_signal<bool> TxWr;
+  sc_signal<bool> txWr;
   sc_signal<sc_uint<4> > shiftTxCounter;
   sc_signal<sc_uint<5> > dataNum;
   sc_signal<sc_uint<5> > txRptr;
   sc_signal<sc_uint<5> > txWptr;
   sc_signal<sc_uint<8> > txFifoOut;
-  sc_signal<sc_uint<8> > txMemArray[16];
   sc_signal<sc_uint<10> > txShiftReg;
 
   // other variables
-  sc_signal<bool> txTxeFb;
-
+  sc_uint<8> txMemArray[16];
+  
   // Process declaration
   //
   // InitReset
@@ -83,24 +82,11 @@ SC_MODULE (mApbUartTransmitter) {
       sensitive << ctrlShiftTx;
       sensitive << ctrlTxEn;
       sensitive << ctrlTxt;
-      sensitive << dataNum;
-      sensitive << fsmIdle;
-      sensitive << fsmShift;
-      sensitive << loadData;
       sensitive << state;
       sensitive << shiftTxCounter;
-      sensitive << txFifoEmpty;
-      sensitive << txFifoFull;
-      sensitive << txFifoOut;
-      sensitive << txParity;
       sensitive << txShiftReg;
-      sensitive << txTxeFb;
       sensitive << txRptr;
       sensitive << txWptr;
-      sensitive << TxWr;
-      for (unsigned int i = 0; i < 16; i ++) {
-        sensitive << txMemArray[i];
-      }
   }
 };
 
