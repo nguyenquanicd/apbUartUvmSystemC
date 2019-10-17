@@ -110,8 +110,8 @@ void mApbUartTransmitter::pmSignals() {
   sc_uint<10> txShiftReg_r    = txShiftReg.read();
 
   // 1st intermediate value
-  bool fsmShift_w = state_r;
-  bool fsmIdle_w  = ~state_r;
+  bool fsmShift_w        = state_r;
+  bool fsmIdle_w         = ~state_r;
   bool txFifoEmpty_w     = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] == txWptr_r[4]);
   bool txFifoFull_w      = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] != txWptr_r[4]);
   bool txWr_w            = ctrlEn_r & ctrlTxEn_r;
@@ -143,7 +143,7 @@ void mApbUartTransmitter::pmSignals() {
   
   // Signal written
   data9.write(data9_w);
-  dataNum.write(txWptr_r - txRptr_r);
+  dataNum.write((txWptr_r - txRptr_r));
   fsmIdle.write(fsmIdle_w);
   fsmShift.write(fsmShift_w);
   loadData.write(loadData_w);
