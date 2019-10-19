@@ -32,27 +32,29 @@ SC_MODULE (mApbUartTransmitter) {
   sc_out<bool> uartTx;    
 
   // Internal signals
+  // Method
   sc_signal<bool> data9;
-  sc_signal<bool> fsmIdle;
-  sc_signal<bool> fsmShift;
   sc_signal<bool> loadData;
   sc_signal<bool> shiftEn;
-  sc_signal<bool> state;
-  sc_signal<bool> txFifoEmpty;
-  sc_signal<bool> txFifoFull;
   sc_signal<bool> txFifoRe;
   sc_signal<bool> txFifoWe;
-  sc_signal<bool> txParity;
   sc_signal<bool> txShiftComplete;
-  sc_signal<bool> txWr;
+  sc_signal<sc_uint<8> > txFifoOut;
+  // Thread
+  sc_signal<bool> state;
   sc_signal<sc_uint<4> > shiftTxCounter;
-  sc_signal<sc_uint<5> > dataNum;
   sc_signal<sc_uint<5> > txRptr;
   sc_signal<sc_uint<5> > txWptr;
-  sc_signal<sc_uint<8> > txFifoOut;
   sc_signal<sc_uint<10> > txShiftReg;
-
-  // other variables
+  
+  // Internal variables
+  //bool fsmIdle;
+  //bool fsmShift;
+  //bool txFifoEmpty;
+  //bool txFifoFull;
+  //bool txParity;
+  //bool txWr;
+  //sc_uint<5> dataNum;
   sc_uint<8> txMemArray[16];
   
   // Process declaration
@@ -76,17 +78,17 @@ SC_MODULE (mApbUartTransmitter) {
       reset_signal_is(pResetN, false);
 
     SC_METHOD(pmSignals);
-      sensitive << ctrlD9;
-      sensitive << ctrlEn;
-      sensitive << ctrlEp;
-      sensitive << ctrlShiftTx;
-      sensitive << ctrlTxEn;
-      sensitive << ctrlTxt;
-      sensitive << state;
-      sensitive << shiftTxCounter;
-      sensitive << txShiftReg;
-      sensitive << txRptr;
-      sensitive << txWptr;
+      sensitive << ctrlD9;      // from Input
+      sensitive << ctrlEn;      // from Input
+      sensitive << ctrlEp;      // from Input
+      sensitive << ctrlShiftTx; // from Input
+      sensitive << ctrlTxEn;    // from Input
+      sensitive << ctrlTxt;     // from Input
+      sensitive << state;          // from Thread
+      sensitive << shiftTxCounter; // from Thread
+      sensitive << txShiftReg;     // from Thread
+      sensitive << txRptr;         // from Thread
+      sensitive << txWptr;         // from Thread
   }
 };
 
