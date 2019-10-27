@@ -46,7 +46,7 @@ SC_MODULE(mApbUartReciever) {
 	sc_signal<bool>          uartSync;
 	sc_signal<bool>          rxShiftEn;
 	sc_signal<bool>          rxComplete;
-	sc_signal<bool>          wrRxRifo;
+	sc_signal<bool>          wrRxFifo;
 	sc_signal<bool>          rdRxFifo;
 	sc_signal<bool>          rxFifoEmplty;
 	sc_signal<bool>          rxFifoFull;
@@ -67,6 +67,7 @@ SC_MODULE(mApbUartReciever) {
 	sc_signal<sc_uint<10> >  rxFifoDataOut;
 	sc_signal<sc_uint<10> >  dataInRxFifo;
 	sc_signal<sc_uint<10> >  rxMemArray[16];
+	//sc_uint<10>  rxMemArray[16];
 
 	// Function
 	void pcProcess();
@@ -80,7 +81,6 @@ SC_MODULE(mApbUartReciever) {
 			reset_signal_is(pResetN, false); // synchronous reset assignment, active low
 			
 		SC_METHOD(pmProcess);
-			sensitive << ctrlShiftRx;
 			sensitive << sampleCounter;
 			sensitive << fsmStart;
 			sensitive << fsmShift;
@@ -112,9 +112,9 @@ SC_MODULE(mApbUartReciever) {
 			sensitive << rxRptr;
 			sensitive << msbRxfifoDiff;
 			sensitive << lsbRxfifoEqual;
-			for (int i = 0; i < 16; i++) {
-				sensitive << rxMemArray[i];
-			}			
+			//for (int i = 0; i < 16; i++) {
+				//sensitive << rxMemArray[i];
+			//}
 	}
 };
 
