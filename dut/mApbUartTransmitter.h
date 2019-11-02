@@ -45,6 +45,7 @@ SC_MODULE (mApbUartTransmitter) {
   sc_signal<sc_uint<4> > shiftTxCounter;
   sc_signal<sc_uint<5> > txRptr;
   sc_signal<sc_uint<5> > txWptr;
+  sc_signal<sc_uint<8> > txMemArray[16];
   sc_signal<sc_uint<10> > txShiftReg;
   
   // Internal variables
@@ -55,7 +56,6 @@ SC_MODULE (mApbUartTransmitter) {
   //bool txParity;
   //bool txWr;
   //sc_uint<5> dataNum;
-  sc_uint<8> txMemArray[16];
   
   // Process declaration
   //
@@ -84,11 +84,14 @@ SC_MODULE (mApbUartTransmitter) {
       sensitive << ctrlShiftTx; // from Input
       sensitive << ctrlTxEn;    // from Input
       sensitive << ctrlTxt;     // from Input
-      sensitive << state;          // from Thread
-      sensitive << shiftTxCounter; // from Thread
-      sensitive << txShiftReg;     // from Thread
-      sensitive << txRptr;         // from Thread
-      sensitive << txWptr;         // from Thread
+      sensitive << state;           // from Thread
+      sensitive << shiftTxCounter;  // from Thread
+      sensitive << txShiftReg;      // from Thread
+      sensitive << txRptr;          // from Thread
+      sensitive << txWptr;          // from Thread
+      for (int i=0; i<16; i++) {    
+        sensitive << txMemArray[i]; // from Thread
+      }
   }
 };
 

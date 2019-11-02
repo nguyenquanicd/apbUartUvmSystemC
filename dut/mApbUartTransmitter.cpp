@@ -30,6 +30,11 @@ void mApbUartTransmitter::pcRegisters() {
       sc_uint<5> txRptr_r         = txRptr.read();
       sc_uint<5> txWptr_r         = txWptr.read();
       sc_uint<10> txShiftReg_r    = txShiftReg.read();
+      sc_uint<8> txMemArray_r[16];
+      int j ;
+      for (j=0; j<16; j++) {
+        txMemArray_r[j] = txMemArray[j].read();
+      }
       
       // Write pointer declare
       sc_uint<5> txWptr_w;
@@ -88,8 +93,12 @@ void mApbUartTransmitter::pcRegisters() {
       txWptr.write(txWptr_w);
       
       // memory of TXFIFO
-      if (txFifoWe_r == 1) {
-        txMemArray[txWptr_w] = ctrlData_r;
+      for (j=0; j<16; j++) {
+        if ((txFifoWe_r == 1) && (j == txWptr_w)) {
+          txMemArray[j].write(ctrlData_r);
+        } else {
+            txMemArray[j].write(txMemArray_r[j]);
+        }
       }
       
       wait();
@@ -111,22 +120,21 @@ void mApbUartTransmitter::pmSignals() {
   sc_uint<5> txRptr_r         = txRptr.read();
   sc_uint<5> txWptr_r         = txWptr.read();
   sc_uint<10> txShiftReg_r    = txShiftReg.read();
-
-  // 1st intermediate value
-  bool fsmIdle       = ~state_r;
+  // From Memory with Read pointer
+  sc_uint<8> txFifoOut_w      = txMemArray[txRptr_r].read();
+  
+  // intermediate value
+  bool fsmIdle       = !state_r;
   bool fsmShift      = state_r;
   bool txFifoEmpty   = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] == txWptr_r[4]);
   bool txFifoFull    = (txRptr_r.range(3,0) == txWptr_r.range(3,0)) & (txRptr_r[4] != txWptr_r[4]);
   bool txWr          = ctrlEn_r & ctrlTxEn_r;
+  bool txParity      = (ctrlEp_r == 1) ? !txFifoOut_w.xor_reduce() : txFifoOut_w.xor_reduce();
   sc_uint<5> dataNum = txWptr_r - txRptr_r;
-  
-  // 2nd intermediate value
-  sc_uint<8> txFifoOut_w = txMemArray[txRptr_r];
-  bool txParity          = (ctrlEp_r == 1) ? ~txFifoOut_w.xor_reduce() : txFifoOut_w.xor_reduce();
 
   // complex assign
   bool data9_w           = (ctrlD9_r == 1) ? txParity : 0b1;
-  bool loadData_w        = ctrlShiftTx_r & ~txFifoEmpty & fsmShift;  
+  bool loadData_w        = ctrlShiftTx_r & !txFifoEmpty & fsmShift;  
   bool txShiftComplete_w = (ctrlD9_r == 1) ? (shiftTxCounter_r == 0xA) : (shiftTxCounter_r == 0x9);
   bool txTxe_w;
   switch (ctrlTxt_r) {
@@ -151,13 +159,13 @@ void mApbUartTransmitter::pmSignals() {
   data9.write(data9_w);
   loadData.write(loadData_w); 
   shiftEn.write((fsmShift & ctrlShiftTx_r));
-  txFifoRe.write((loadData_w & ~txFifoEmpty));
-  txFifoWe.write((txWr & ~txFifoFull));
+  txFifoRe.write((loadData_w & !txFifoEmpty));
+  txFifoWe.write((txWr & !txFifoFull));
   txShiftComplete.write(txShiftComplete_w);
   txFifoOut.write(txFifoOut_w);
   // Ouput written
-  txBusy.write(~(fsmIdle & txTxe_w));
-  txNf.write(~txFifoFull);
+  txBusy.write(!(fsmIdle & txTxe_w));
+  txNf.write(!txFifoFull);
   txTxe.write(txTxe_w);
   uartTx.write((txShiftReg_r[0]));
 }
