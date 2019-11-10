@@ -30,7 +30,7 @@ void mApbUartApbIf::pmCombination() {
     bool dtWe_;
     bool ctrlShiftRxTmp_;
     //
-    bool regWe   = writeEn & regSel & pStrb_all1;
+    bool regWe  = writeEn & regSel & pStrb_all1;
     bool regRe  = ~writeEn & regSel;
     //Write register decoder
     switch (pAddr_lsb.range(4,0)) {
@@ -180,7 +180,7 @@ void mApbUartApbIf::pcSequence() {
     else if (ctrlEnTmp_ & ctrlShiftRx_) {
       rxCounter.write(0);
     }
-    else if (ctrlEnTmp_ & ~ctrlShiftRx_) {
+    else if (ctrlEnTmp_ & (ctrlShiftRx_ == 0)) {
       rxCounter.write(rxCounter.read() + 1);
     }
     //Transmit shift counter
