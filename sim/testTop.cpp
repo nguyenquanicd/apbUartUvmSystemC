@@ -8,26 +8,26 @@
 #include <systemc>
 #include <uvm>
 
-#include "cTest.h"
-#include "DUT.h"
-#include "cIfApbUart.h"
+#include "../uvm_comp/cTest.h"
+#include "../dut/dut_top.cpp"
+#include "../uvm_comp/ifDut.h"
 
 ///////
 int sc_main(int, char*[])
 {
     cTest* coTest = new cTest("coTest");
-    DUT* coDUT = new DUT("coDUT");
+    mUartApbIf* mApbUartApbIf = new DUT("mUartApbIf");
     
     cIfApbUart *coIfApbUartTx = new cIfApbUart("coIfApbUartTx");
-    //cIfApbUart *coIfApbUartRx = new cIfApbUart("coIfApbUartRx");
+    cIfApbUart *coIfApbUartRx = new cIfApbUart("coIfApbUartRx");
     
     uvm::uvm_config_db<cIfApbUart*>::set(0,"coTest.coEnv.coApbUartAgentTx.*","IfApbUart", coIfApbUartTx);
-    coDUT->apbSeqEn(coIfApbUartTx->apbSeqEn);
-    coDUT->pwdata(coIfApbUartTx->pwdata);
+    mUartApbIf->apbSeqEn(coIfApbUartTx->apbSeqEn);
+    mUartApbIf->pwdata(coIfApbUartTx->pwdata);
     
     uvm::run_test();
     
-    delete coDUT;
+    delete mUartApbIf;
     delete coTest;
     delete coIfApbUartTx;
     
