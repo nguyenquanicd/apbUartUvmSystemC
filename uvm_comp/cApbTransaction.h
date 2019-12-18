@@ -31,16 +31,17 @@ class cApbTransaction : public uvm::uvm_sequence_item
     public:  
       unsigned int APB_TRANSACTION_TIMEOUT = 100;
       //struct apbPackage{
-       // bool         pwrite;
-       // sc_uint<32>  paddr;
-        sc_dt::sc_uint<32>  pwdata;
-       // sc_uint<32>  pstrb;
-       // sc_uint<32>  prdata;
-       // bool         pslverr;
-        bool         apbSeqEn;
-       // bool         apbConEn;
-       // unsigned int apbDelay;
-       // bool pready = 1;   
+       bool         pclk;
+       bool         pwrite;
+       sc_uint<32>  paddr;
+       sc_dt::sc_uint<32>  pwdata;
+       sc_uint<32>  pstrb;
+       sc_uint<32>  prdata;
+       bool         pslverr;
+       bool         apbSeqEn;
+       bool         apbConEn;
+       unsigned int apbDelay;
+       bool pready = 1;   
       //}
       
 

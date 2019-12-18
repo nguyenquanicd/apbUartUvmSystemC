@@ -14,14 +14,14 @@
 #include <uvm>
 
 #include "cApbTransaction.h"
-#include "cApbUartAgent.h"
+#include "cApbMasterAgent.h"
 
 ///////
 template<class REQ>
 class cVSequencer : public uvm::uvm_sequencer<REQ>{
         public:
         cApbUartAgent* coApbUartAgentTx;
-        //cApbUartAgent<cApbTransaction>* coApbUartAgentRx;
+        cApbUartAgent* coApbUartAgentRx;
         
         UVM_COMPONENT_PARAM_UTILS(cVSequencer<REQ>)
         cVSequencer(uvm::uvm_component_name name) : uvm::uvm_sequencer<REQ>(name)

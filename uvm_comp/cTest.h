@@ -15,7 +15,7 @@
 #include <uvm>
 
 #include "cEnv.h"
-#include "cApbUartVirSequence.h"
+#include "cVSequence.h"
 
 
 ///////
@@ -56,6 +56,7 @@ class cTest : public uvm::uvm_test
         }
         
         void time_out(){
+            sc_core::wait(50,SC_NS);
             UVM_WARNING("CTEST_H_","TIMEOUT TIMEOUT TIMEOUT");
         }
         

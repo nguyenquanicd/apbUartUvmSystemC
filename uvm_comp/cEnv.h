@@ -14,10 +14,10 @@
 #include <tlm.h>
 #include <uvm>
 
-#include "cApbUartAgent.h"
+#include "cApbMasterAgent.h"
 #include "cVSequencer.h" 
 
-#include "cApbUartAgent.h"
+#include "cApbMasterAgent.h"
 #include "cApbTransaction.h"
 //#include "cApbUartVirSequence.h"
 
@@ -27,7 +27,7 @@ class cEnv : public uvm::uvm_env
         public:
         //Instance
         cApbUartAgent* coApbUartAgentTx;
-        //cApbUartAgent<cApbTransaction>* coApbUartAgentRx;
+        cApbUartAgent* coApbUartAgentRx;
         //cApbUartScoreboard* coApbUartScoreboard;
         cVSequencer<cApbTransaction>* coVSequencer;
         
@@ -49,11 +49,12 @@ class cEnv : public uvm::uvm_env
              coApbUartAgentTx = cApbUartAgent::type_id::create("coApbUartAgentTx", this);
              assert(coApbUartAgentTx);
              
+             coApbUartAgentRx = cApbUartAgent::type_id::create("coApbUartAgentRx", this);
+             assert(coApbUartAgentRx);
+             
              coVSequencer = cVSequencer<cApbTransaction>::type_id::create("coVSequencer", this);
              assert(coVSequencer);
  
-             //coApbUartAgentRx = cApbUartAgent::type_id::create("coApbUartAgentRx", this);
-             //assert(coApbUartAgentRx);
              //coScoreboard = cApbUartScoreboard::type_id::create("coApbUartScoreboard", this);
              //assert(coScoreboard)
              std::cout << sc_core::sc_time_stamp() << " Goi VSequence -------- " << name() << "\n" << std::endl;
@@ -66,6 +67,7 @@ class cEnv : public uvm::uvm_env
          {
              std::cout << sc_core::sc_time_stamp() << " Connect phase " << name() << "\n" << std::endl;
              coVSequencer->coApbUartAgentTx = coApbUartAgentTx;
+             coVSequencer->coApbUartAgentRx = coApbUartAgentRx;
              //coApbUartAgentTx->coApbUartMonitor->item_collected_port.connect(cApbUartScoreboard->..)
              //coApbUartAgentRx->coApbUartMonitor-> ... 
          }
