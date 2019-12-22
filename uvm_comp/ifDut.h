@@ -17,18 +17,18 @@
 class ifApbUart
 {
     public:
-        sc_signal<bool> pclk;
-        sc_signal<bool> preset_n;
-        sc_signal<bool> psel;
-        sc_signal<bool> penable;
-        sc_signal<bool> pwrite;
-        sc_signal<sc_dt::sc_uint<32> > paddr;
+        sc_core::sc_signal<bool> pclk;
+        sc_core::sc_signal<bool> preset_n;
+        sc_core::sc_signal<bool> psel;
+        sc_core::sc_signal<bool> penable;
+        sc_core::sc_signal<bool> pwrite;
+        sc_core::sc_signal<sc_dt::sc_uint<32> > paddr;
         sc_core::sc_signal<bool> apbSeqEn;
         sc_core::sc_signal<sc_dt::sc_uint<32> > pwdata;
-        sc_signal<sc_dt::sc_uint<32> > prdata;
-        sc_signal<sc_dt::sc_uint<4> > pstrb;
-        sc_signal<bool> pready;
-        sc_signal<bool> pslverr;      
+        sc_core::sc_signal<sc_dt::sc_uint<32> > prdata;
+        sc_core::sc_signal<sc_dt::sc_uint<4> > pstrb;
+        sc_core::sc_signal<bool> pready;
+        sc_core::sc_signal<bool> pslverr;      
         ifApbUart(const std::string& name) : pwdata("pwdata"), preset_n("preset_n"),psel("psel"),
                                              penable("penable"), pwrite("pwrite"), paddr("paddr"), 
                                              apbSeqEn("apbSeqEn"), prdata("prdata"), pstrb("pstrb"),

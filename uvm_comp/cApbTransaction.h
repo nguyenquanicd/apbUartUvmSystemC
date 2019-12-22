@@ -33,10 +33,10 @@ class cApbTransaction : public uvm::uvm_sequence_item
       //struct apbPackage{
        bool         pclk;
        bool         pwrite;
-       sc_uint<32>  paddr;
+       sc_dt::sc_uint<32>  paddr;
        sc_dt::sc_uint<32>  pwdata;
-       sc_uint<32>  pstrb;
-       sc_uint<32>  prdata;
+       sc_dt::sc_uint<32>  pstrb;
+       sc_dt::sc_uint<32>  prdata;
        bool         pslverr;
        bool         apbSeqEn;
        bool         apbConEn;

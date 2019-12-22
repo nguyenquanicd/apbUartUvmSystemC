@@ -2,7 +2,7 @@
 //Project:  The UVM-SystemC environemnt for UART (Universal Asynchronous Receiver Transmitter)
 //Function: Common sequences help create the user sequences easily
 //  - User adds more the common sequences in this file
-//Authors:   Truong Cong Hoang Viet, Le Hoang Van, Nguyen Hung Quan
+//Authors:   Truong Cong Hoang Viet
 //Page:     VLSI Technology
 //--------------------------------------
 

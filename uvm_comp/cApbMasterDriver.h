@@ -73,16 +73,18 @@ class cApbUartDriver : public uvm::uvm_driver<REQ>
                 uart_vifApbMaster->psel.write(1);
                 uart_vifApbMaster->paddr.write(user_req.paddr);
                 uart_vifApbMaster->pwrite.write(user_req.pwrite);
+                uart_vifApbMaster->pstrb.write(user_req.pstrb);                
                 if(uart_vifApbMaster->pwrite.read()){
                     uart_vifApbMaster->pwdata.write(user_req.pwdata);
                 } else {
-                    uart_vifApbMaster->prdata.write(user_req.prdata);
+                    user_req.prdata = uart_vifApbMaster->prdata.read();
                 }
-                uart_vifApbMaster->pstrb.write(user_req.pstrb);
+                
+
                 wait(uart_vifApbMaster->pclk.posedge_event());
                 uart_vifApbMaster->penable.write(1);
                 if(uart_vifApbMaster->psel || uart_vifApbMaster->penable || uart_vifApbMaster->pready){
-                    if(uart_vifApbMaster->pclk.pesedgess()){
+                    if(uart_vifApbMaster->pclk.posedge()){
                         uart_vifApbMaster->psel = 0;
                         uart_vifApbMaster->penable = 0;
                     }
