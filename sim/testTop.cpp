@@ -8,35 +8,34 @@
 #define UART0_CLOCK_CYCLE 50
 #define UART1_CLOCK_CYCLE 86
 
+#include <scv.h>
 #include <systemc>
+#include <tlm.h>
 #include <uvm>
 
-#include "../uvm_comp/cTest.h"
-#include "../dut/dut_top.cpp"
-#include "../uvm_comp/ifDut.h"
-
+#include "cTest.h"
+#include "ifDut.h"
+#include "dut_top.cpp"
+#include "mPeripheral.cpp"
 ///////
 int sc_main(int, char*[])
 {
-    sc_clock uart0_clk("uart0_clk", UART0_CLOCK_CYCLE/2, SC_NS, 0.5);
-    sc_clock uart1_clk("uart1_clk", UART1_CLOCK_CYCLE/2, SC_NS, 0.5);
-    
     sc_signal<bool> uart_0to1;
     sc_signal<bool> uart_1to0;
-    sc_signal<bool> preset_n;
     
     cTest* coTest = new cTest("coTest");
-    uartTop* dut_top = new uartTop("dut_top");
+    TOP* dut_top = new TOP("dut_top");
+    mPeripheral* peripheral = new mPeripheral("peripheral");
     
     ifApbUart *vifApbUartTx = new ifApbUart("vifApbUartTx");
     ifApbUart *vifApbUartRx = new ifApbUart("vifApbUartRx");
     ifInterrupt *vifInterruptTx = new ifInterrupt("vifInterruptTx");
     ifInterrupt *vifInterruptRx = new ifInterrupt("vifInterruptRx");
     
-    //vifApbUartTx->pclk(uart0_clk);
-    //vifApbUartRx->pclk(uart1_clk);
-    //vifApbUartTx->preset_n(preset_n);
-    //vifApbUartRx->preset_n(preset_n);
+    peripheral->uart0_clk(vifApbUartTx->pclk);
+    peripheral->uart1_clk(vifApbUartRx->pclk);
+    peripheral->uart0_pResetN(vifApbUartTx->preset_n);
+    peripheral->uart1_pResetN(vifApbUartRx->preset_n);
       
     uvm::uvm_config_db<ifApbUart*>::set(0,"coTest.coEnv.coApbUartAgentTx.*","vifApbMaster", vifApbUartTx);
     uvm::uvm_config_db<ifApbUart*>::set(0,"coTest.coEnv.coApbUartAgentRx.*","vifApbMaster", vifApbUartRx);
@@ -44,13 +43,14 @@ int sc_main(int, char*[])
     uvm::uvm_config_db<ifInterrupt*>::set(0,"coTest.coEnv.coApbUartAgentTx.*","vifInterrupt",vifInterruptTx);
     uvm::uvm_config_db<ifInterrupt*>::set(0,"coTest.coEnv.coApbUartAgentRx.*","vifInterrupt",vifInterruptRx);
     
-    // Connect to UART 0
+    //Connect to UART 0
     dut_top->pclk_0(vifApbUartTx->pclk);
     dut_top->preset_n_0(vifApbUartTx->preset_n);
     dut_top->pwrite_0(vifApbUartTx->pwrite);
     dut_top->psel_0(vifApbUartTx->psel);
     dut_top->penable_0(vifApbUartTx->penable);
     dut_top->pwdata_0(vifApbUartTx->pwdata);
+    dut_top->paddr_0(vifApbUartTx->paddr);
     dut_top->pstrb_0(vifApbUartTx->pstrb);
     dut_top->prdata_0(vifApbUartTx->prdata);
     dut_top->pready_0(vifApbUartTx->pready);
@@ -64,7 +64,7 @@ int sc_main(int, char*[])
     dut_top->ctrl_rif_0(vifInterruptTx->ctrl_rif);
     dut_top->ctrl_tif_0(vifInterruptTx->ctrl_tif);
     #endif
-
+    
     // Connect to UART 2    
     dut_top->pclk_1(vifApbUartRx->pclk);
     dut_top->preset_n_1(vifApbUartRx->preset_n);
@@ -72,6 +72,7 @@ int sc_main(int, char*[])
     dut_top->psel_1(vifApbUartRx->psel);
     dut_top->penable_1(vifApbUartRx->penable);
     dut_top->pwdata_1(vifApbUartRx->pwdata);
+    dut_top->paddr_1(vifApbUartRx->paddr);
     dut_top->pstrb_1(vifApbUartRx->pstrb);
     dut_top->prdata_1(vifApbUartRx->prdata);
     dut_top->pready_1(vifApbUartRx->pready);
@@ -90,11 +91,8 @@ int sc_main(int, char*[])
     dut_top->uart_0to1(uart_0to1);
     dut_top->uart_1to0(uart_1to0);
    
-    preset_n.write(0);
-    sc_core::wait(UART0_CLOCK_CYCLE + UART1_CLOCK_CYCLE, sc_core::SC_NS);
-    preset_n.write(1);
-    sc_core::wait(1, sc_core::SC_NS);
     cout << "Combine duoc roi" << std::endl;
+    
     uvm::run_test();
     
     delete dut_top;
