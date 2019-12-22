@@ -36,10 +36,11 @@ class cTest : public uvm::uvm_test
             //"default_sequence",cApbUartVirSequence::type_id::get());           
         }
         
-        void run_phase(uvm::uvm_phase& phase){
+        void run_phase(uvm::uvm_phase& phase){    
             UVM_INFO(get_name(), "** UVM TEST STARTED **", uvm::UVM_NONE);
             uvm::uvm_test::run_phase(phase);
-            phase.raise_objection(this);
+            phase.raise_objection(this);   
+            std::cout << " Start sequenence at cTest" << std::endl;               
             SC_FORK
               sc_core::sc_spawn(sc_bind(&cTest::start_sequence, this)), 
               sc_core::sc_spawn(sc_bind(&cTest::time_out, this))
@@ -51,8 +52,8 @@ class cTest : public uvm::uvm_test
             UVM_INFO(get_name(), "** UVM TEST ENDED **", uvm::UVM_NONE);
         }
         
-        void start_sequence(){
-            coVSequence->start(coEnv->coVSequencer, NULL);
+        void start_sequence(){          
+            coVSequence->start(coEnv->coVSequencer, NULL); 
         }
         
         void time_out(){
@@ -60,7 +61,6 @@ class cTest : public uvm::uvm_test
             UVM_WARNING("CTEST_H_","TIMEOUT TIMEOUT TIMEOUT");
         }
         
-
 }; // class cTest
 
 #endif /*  CTEST_H_ */

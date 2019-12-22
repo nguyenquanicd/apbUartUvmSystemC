@@ -49,8 +49,8 @@ class ifInterrupt
         sc_signal<bool > ctrl_rif;
         sc_signal<bool > ctrl_tif;                
         ifInterrupt(const std::string& name) : ctrl_fif("ctrl_fif"), ctrl_oif("ctrl_oif"),
-                                               ctrl_pif("ctrl_oif"), ctrl_rif("ctrl_oif"),
-                                               ctrl_tif("ctrl_oif")
+                                               ctrl_pif("ctrl_pif"), ctrl_rif("ctrl_rif"),
+                                               ctrl_tif("ctrl_tif")
                                                {}
         #endif  
 
