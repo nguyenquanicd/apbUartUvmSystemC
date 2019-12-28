@@ -7,7 +7,7 @@
 //--------------------------------------
 #include "systemc.h"
 #include "mApbUartTop.cpp"
-SC_MODULE (TOP) { 
+SC_MODULE (dut_top) { 
   //
   //UART 0
   //
@@ -66,7 +66,7 @@ SC_MODULE (TOP) {
 	mApbUartTop    InstApbUartTop_0;
 	mApbUartTop    InstApbUartTop_1;
   //Constructor
-	SC_CTOR (TOP) : InstApbUartTop_0("InstApbUartTop_0"), 
+	SC_CTOR (dut_top) : InstApbUartTop_0("InstApbUartTop_0"), 
 		InstApbUartTop_1("InstApbUartTop_1")
 	{
    //
