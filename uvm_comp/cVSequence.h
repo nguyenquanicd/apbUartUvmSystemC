@@ -13,16 +13,17 @@
 #include <systemc>
 #include <tlm.h>
 #include <uvm>
-
+#include "macro.h"
 #include "cCommonSequence.h"
 #include "cApbTransaction.h"
 
 class cApbUartVirSequence: public uvm::uvm_sequence<>
 {
     public:
-        cApbUartSequence<cApbTransaction>* coApbUartSequence;
+        cApbWriteSequence<cApbTransaction>* WriteSeq;
+        cApbReadSequence<cApbTransaction>* ReadSeq;
         
-        cApbUartVirSequence(const std::string& name = "cApbUartVirSequence"):uvm_sequence<>(name){}
+        cApbUartVirSequence(const std::string& name = "cApbUartVirSequence") : uvm_sequence<>(name){}
         
         UVM_OBJECT_UTILS(cApbUartVirSequence);
         UVM_DECLARE_P_SEQUENCER(cVSequencer<cApbTransaction>);
@@ -35,12 +36,13 @@ class cApbUartVirSequence: public uvm::uvm_sequence<>
         //    std::cout << sc_core::sc_time_stamp() << " Cais DKM --------------- pre_body " << std::endl;
         //}
         
-        void body(){
-            
+        void body(){          
             UVM_INFO(this->get_name(), "Virtual sequence start here", uvm::UVM_NONE);
-            UVM_DO_ON(coApbUartSequence,p_sequencer->coApbUartAgentTx->coApbUartSequencer)
-            UVM_INFO(this->get_name(), "Sequence finished here", uvm::UVM_NONE);
-            
+            sc_core::wait(50,SC_NS);
+            ApbWriteTX(0x08,0x32);
+            ApbReadTX(0x08,0x32,0xFF);
+            sc_core::wait(100,SC_NS);
+            UVM_INFO(this->get_name(), "Sequence finished here", uvm::UVM_NONE);          
         }
         
         //void post_body()

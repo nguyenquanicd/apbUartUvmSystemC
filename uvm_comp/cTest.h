@@ -39,8 +39,7 @@ class cTest : public uvm::uvm_test
         void run_phase(uvm::uvm_phase& phase){    
             UVM_INFO(get_name(), "** UVM TEST STARTED **", uvm::UVM_NONE);
             uvm::uvm_test::run_phase(phase);
-            phase.raise_objection(this);   
-            std::cout << " Start sequenence at cTest" << std::endl;               
+            phase.raise_objection(this);              
             SC_FORK
               sc_core::sc_spawn(sc_bind(&cTest::start_sequence, this)), 
               sc_core::sc_spawn(sc_bind(&cTest::time_out, this))
@@ -57,7 +56,7 @@ class cTest : public uvm::uvm_test
         }
         
         void time_out(){
-            sc_core::wait(50,SC_NS);
+            sc_core::wait(500,SC_NS);
             UVM_WARNING("CTEST_H_","TIMEOUT TIMEOUT TIMEOUT");
         }
         

@@ -22,8 +22,8 @@ class ifApbUart
         sc_core::sc_signal<bool> psel;
         sc_core::sc_signal<bool> penable;
         sc_core::sc_signal<bool> pwrite;
-        sc_core::sc_signal<sc_dt::sc_uint<32> > paddr;
         sc_core::sc_signal<bool> apbSeqEn;
+        sc_core::sc_signal<sc_dt::sc_uint<32> > paddr;
         sc_core::sc_signal<sc_dt::sc_uint<32> > pwdata;
         sc_core::sc_signal<sc_dt::sc_uint<32> > prdata;
         sc_core::sc_signal<sc_dt::sc_uint<4> > pstrb;
