@@ -17,6 +17,7 @@
 #include "ifDut.h"
 #include "dut_top.cpp"
 #include "mPeripheral.cpp"
+
 ///////
 int sc_main(int, char*[])
 {
@@ -92,7 +93,11 @@ int sc_main(int, char*[])
     dut_top->uart_1to0(uart_1to0);
    
     cout << "Combine duoc roi" << std::endl;
-    
+    //peripheral->uart1_pResetN.write(0);
+    //peripheral->uart0_pResetN.write(0);
+    //sc_core::sc_start(10, SC_NS);
+    //peripheral->uart1_pResetN.write(1);
+    //peripheral->uart0_pResetN.write(1);    
     uvm::run_test();
     
     delete dut_top;

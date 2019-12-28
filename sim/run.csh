@@ -7,4 +7,3 @@ g++ -I/cygdrive/d/SystemC/uvm-systemc-1.0-beta2/uvm-systemc-1.0-beta2/include \
  -I/cygdrive/d/SystemC/7_UVM/apbUartUvmSystemC-test/dut \
  -I/cygdrive/d/SystemC/7_UVM/apbUartUvmSystemC-test/uvm_comp \
  -o test_top *.cpp -lscv -luvm-systemc -lsystemc -lm
-
