@@ -6,7 +6,8 @@
 //Page:    VLSI Technology
 //--------------------------------------
 #include "systemc.h"
-SC_MODULE (mApbUartApbIf) { 
+#include "mApbUartTop.cpp"
+SC_MODULE (TOP) { 
   //
   //UART 0
   //
@@ -65,7 +66,7 @@ SC_MODULE (mApbUartApbIf) {
 	mApbUartTop    InstApbUartTop_0;
 	mApbUartTop    InstApbUartTop_1;
   //Constructor
-	SC_CTOR (mApbUartTop) : InstApbUartTop_0("InstApbUartTop_0"), 
+	SC_CTOR (TOP) : InstApbUartTop_0("InstApbUartTop_0"), 
 		InstApbUartTop_1("InstApbUartTop_1")
 	{
    //
