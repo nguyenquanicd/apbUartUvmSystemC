@@ -13,7 +13,7 @@
 #include <systemc>
 #include <tlm.h>
 #include <uvm>
-#include "macro.h"
+#include "uMacro.h"
 #include "cCommonSequence.h"
 #include "cApbTransaction.h"
 
