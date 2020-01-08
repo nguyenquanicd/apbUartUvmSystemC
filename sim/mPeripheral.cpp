@@ -28,12 +28,12 @@ SC_MODULE(mPeripheral)
     }
     
     void resetInitualize(){
-        //uart0_pResetN.write(0);
-        //uart1_pResetN.write(0);
+        uart0_pResetN.write(0);
+        uart1_pResetN.write(0);
         //std::cout << sc_core::sc_time_stamp() << " Value of reset has been changed to  " << uart0_pResetN.read() << std::endl;
-        //sc_core::wait(10, SC_NS);    
-        //uart0_pResetN.write(1);
-        //uart1_pResetN.write(1);
+        sc_core::wait(10, SC_NS);    
+        uart0_pResetN.write(1);
+        uart1_pResetN.write(1);
         //std::cout << sc_core::sc_time_stamp() << " Value of reset has been changed to  " << uart0_pResetN.read() << std::endl;
     }
     

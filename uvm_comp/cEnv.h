@@ -19,7 +19,7 @@
 
 #include "cApbMasterAgent.h"
 #include "cApbTransaction.h"
-//#include "cApbUartVirSequence.h"
+//#include "cVSequence.h"
 
 ///////
 class cEnv : public uvm::uvm_env
@@ -57,7 +57,7 @@ class cEnv : public uvm::uvm_env
  
              //coScoreboard = cApbUartScoreboard::type_id::create("coApbUartScoreboard", this);
              //assert(coScoreboard)
-             std::cout << sc_core::sc_time_stamp() << " Goi VSequence -------- " << name() << "\n" << std::endl;
+             //std::cout << sc_core::sc_time_stamp() << " Goi VSequence -------- " << name() << "\n" << std::endl;
              //uvm::uvm_config_db<uvm::uvm_object_wrapper*>
              //::set(this,"coVSequencer.run_phase","default_sequence",
              //cApbUartVirSequence::type_id::get());

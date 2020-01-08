@@ -25,7 +25,7 @@ int sc_main(int, char*[])
     sc_signal<bool> uart_1to0;
     
     cTest* coTest = new cTest("coTest");
-    dut_top* instDutTop = new dut_top("instDutTop");
+    TOP* dut_top = new TOP("dut_top");
     mPeripheral* peripheral = new mPeripheral("peripheral");
     
     ifApbUart *vifApbUartTx = new ifApbUart("vifApbUartTx");
@@ -45,62 +45,64 @@ int sc_main(int, char*[])
     uvm::uvm_config_db<ifInterrupt*>::set(0,"coTest.coEnv.coApbUartAgentRx.*","vifInterrupt",vifInterruptRx);
     
     //Connect to UART 0
-    instDutTop->pclk_0(vifApbUartTx->pclk);
-    instDutTop->preset_n_0(vifApbUartTx->preset_n);
-    instDutTop->pwrite_0(vifApbUartTx->pwrite);
-    instDutTop->psel_0(vifApbUartTx->psel);
-    instDutTop->penable_0(vifApbUartTx->penable);
-    instDutTop->pwdata_0(vifApbUartTx->pwdata);
-    instDutTop->paddr_0(vifApbUartTx->paddr);
-    instDutTop->pstrb_0(vifApbUartTx->pstrb);
-    instDutTop->prdata_0(vifApbUartTx->prdata);
-    instDutTop->pready_0(vifApbUartTx->pready);
-    instDutTop->pslverr_0(vifApbUartTx->pslverr);
+    dut_top->pclk_0(vifApbUartTx->pclk);
+    dut_top->preset_n_0(vifApbUartTx->preset_n);
+    dut_top->pwrite_0(vifApbUartTx->pwrite);
+    dut_top->psel_0(vifApbUartTx->psel);
+    dut_top->penable_0(vifApbUartTx->penable);
+    dut_top->pwdata_0(vifApbUartTx->pwdata);
+    dut_top->paddr_0(vifApbUartTx->paddr);
+    dut_top->pstrb_0(vifApbUartTx->pstrb);
+    dut_top->prdata_0(vifApbUartTx->prdata);
+    dut_top->pready_0(vifApbUartTx->pready);
+    dut_top->pslverr_0(vifApbUartTx->pslverr);
     #ifdef INTERRUPT_COM
-    instDutTop->ctrl_if_0(vifInterruptTx->ctrl_if);
+    dut_top->ctrl_if_0(vifInterruptTx->ctrl_if);
     #else
-    instDutTop->ctrl_fif_0(vifInterruptTx->ctrl_fif);
-    instDutTop->ctrl_oif_0(vifInterruptTx->ctrl_oif);
-    instDutTop->ctrl_pif_0(vifInterruptTx->ctrl_pif);
-    instDutTop->ctrl_rif_0(vifInterruptTx->ctrl_rif);
-    instDutTop->ctrl_tif_0(vifInterruptTx->ctrl_tif);
+    dut_top->ctrl_fif_0(vifInterruptTx->ctrl_fif);
+    dut_top->ctrl_oif_0(vifInterruptTx->ctrl_oif);
+    dut_top->ctrl_pif_0(vifInterruptTx->ctrl_pif);
+    dut_top->ctrl_rif_0(vifInterruptTx->ctrl_rif);
+    dut_top->ctrl_tif_0(vifInterruptTx->ctrl_tif);
     #endif
     
     // Connect to UART 2    
-    instDutTop->pclk_1(vifApbUartRx->pclk);
-    instDutTop->preset_n_1(vifApbUartRx->preset_n);
-    instDutTop->pwrite_1(vifApbUartRx->pwrite);
-    instDutTop->psel_1(vifApbUartRx->psel);
-    instDutTop->penable_1(vifApbUartRx->penable);
-    instDutTop->pwdata_1(vifApbUartRx->pwdata);
-    instDutTop->paddr_1(vifApbUartRx->paddr);
-    instDutTop->pstrb_1(vifApbUartRx->pstrb);
-    instDutTop->prdata_1(vifApbUartRx->prdata);
-    instDutTop->pready_1(vifApbUartRx->pready);
-    instDutTop->pslverr_1(vifApbUartRx->pslverr); 
+    dut_top->pclk_1(vifApbUartRx->pclk);
+    dut_top->preset_n_1(vifApbUartRx->preset_n);
+    dut_top->pwrite_1(vifApbUartRx->pwrite);
+    dut_top->psel_1(vifApbUartRx->psel);
+    dut_top->penable_1(vifApbUartRx->penable);
+    dut_top->pwdata_1(vifApbUartRx->pwdata);
+    dut_top->paddr_1(vifApbUartRx->paddr);
+    dut_top->pstrb_1(vifApbUartRx->pstrb);
+    dut_top->prdata_1(vifApbUartRx->prdata);
+    dut_top->pready_1(vifApbUartRx->pready);
+    dut_top->pslverr_1(vifApbUartRx->pslverr); 
     #ifdef INTERRUPT_COM
-    instDutTop->ctrl_if_1(vifInterruptRx->ctrl_if);
+    dut_top->ctrl_if_1(vifInterruptRx->ctrl_if);
     #else
-    instDutTop->ctrl_fif_1(vifInterruptRx->ctrl_fif);
-    instDutTop->ctrl_oif_1(vifInterruptRx->ctrl_oif);
-    instDutTop->ctrl_pif_1(vifInterruptRx->ctrl_pif);
-    instDutTop->ctrl_rif_1(vifInterruptRx->ctrl_rif);
-    instDutTop->ctrl_tif_1(vifInterruptRx->ctrl_tif);
+    dut_top->ctrl_fif_1(vifInterruptRx->ctrl_fif);
+    dut_top->ctrl_oif_1(vifInterruptRx->ctrl_oif);
+    dut_top->ctrl_pif_1(vifInterruptRx->ctrl_pif);
+    dut_top->ctrl_rif_1(vifInterruptRx->ctrl_rif);
+    dut_top->ctrl_tif_1(vifInterruptRx->ctrl_tif);
     #endif
     
     // For UART checker 
-    instDutTop->uart_0to1(uart_0to1);
-    instDutTop->uart_1to0(uart_1to0);
+    dut_top->uart_0to1(uart_0to1);
+    dut_top->uart_1to0(uart_1to0);
    
     cout << "Combine duoc roi" << std::endl;
     //peripheral->uart1_pResetN.write(0);
     //peripheral->uart0_pResetN.write(0);
     //sc_core::sc_start(10, SC_NS);
     //peripheral->uart1_pResetN.write(1);
-    //peripheral->uart0_pResetN.write(1);    
+    //peripheral->uart0_pResetN.write(1);  
+    #include "uart_trace.h"    
     uvm::run_test();
+
     
-    delete instDutTop;
+    delete dut_top;
     delete coTest;
     delete vifApbUartTx;
     delete vifApbUartRx;

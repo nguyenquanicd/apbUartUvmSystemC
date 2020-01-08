@@ -75,11 +75,11 @@ class cApbUartDriver : public uvm::uvm_driver<REQ>
                 uart_vifApbMaster->paddr.write(user_req.paddr);
                 uart_vifApbMaster->pwrite.write(user_req.pwrite);
                 uart_vifApbMaster->pstrb.write(user_req.pstrb); 
-                
                 if(user_req.pwrite){
                     uart_vifApbMaster->pwdata.write(user_req.pwdata);
                 } else {
                     user_req.prdata = uart_vifApbMaster->prdata.read();
+                    std::cout << "DECMN BUG " << uart_vifApbMaster->prdata.read() << std::endl;
                 }
                 
                 wait(uart_vifApbMaster->pclk.posedge_event());

@@ -1,0 +1,619 @@
+$date
+     Jan 08, 2020       07:16:15
+$end
+
+$version
+ SystemC 2.3.3-Accellera --- May 12 2019 11:25:55
+$end
+
+$timescale
+     1 ps
+$end
+
+$scope module SystemC $end
+$var wire    1  aaaaa  ctrlD9_Tx       $end
+$var wire    8  aaaab  ctrlData_Tx [7:0]  $end
+$var wire    1  aaaac  ctrlDataRd_Tx       $end
+$var wire    1  aaaad  ctrlEn_Tx       $end
+$var wire    1  aaaae  ctrlEp_Tx       $end
+$var wire    2  aaaaf  ctrlRxt_Tx [1:0]  $end
+$var wire    1  aaaag  ctrlShiftRx_Tx       $end
+$var wire    1  aaaah  ctrlShiftTx_Tx       $end
+$var wire    1  aaaai  ctrlTxEn_Tx       $end
+$var wire    2  aaaaj  ctrlTxt_Tx [1:0]  $end
+$var wire    1  aaaak  rxBusy_Tx       $end
+$var wire    8  aaaal  rxData_Tx [7:0]  $end
+$var wire    1  aaaam  rxFe_Tx       $end
+$var wire    1  aaaan  rxNe_Tx       $end
+$var wire    1  aaaao  rxOv_Tx       $end
+$var wire    1  aaaap  rxPe_Tx       $end
+$var wire    1  aaaaq  rxRxf_Tx       $end
+$var wire    1  aaaar  txBusy_Tx       $end
+$var wire    1  aaaas  txNf_Tx       $end
+$var wire    1  aaaat  txTxe_Tx       $end
+$var wire    1  aaaau  ctrlD9_Rx       $end
+$var wire    8  aaaav  ctrlData_Rx [7:0]  $end
+$var wire    1  aaaaw  ctrlDataRd_Rx       $end
+$var wire    1  aaaax  ctrlEn_Rx       $end
+$var wire    1  aaaay  ctrlEp_Rx       $end
+$var wire    2  aaaaz  ctrlRxt_Rx [1:0]  $end
+$var wire    1  aaaba  ctrlShiftRx_Rx       $end
+$var wire    1  aaabb  ctrlShiftTx_Rx       $end
+$var wire    1  aaabc  ctrlTxEn_Rx       $end
+$var wire    2  aaabd  ctrlTxt_Rx [1:0]  $end
+$var wire    1  aaabe  rxBusy_Rx       $end
+$var wire    8  aaabf  rxData_Rx [7:0]  $end
+$var wire    1  aaabg  rxFe_Rx       $end
+$var wire    1  aaabh  rxNe_Rx       $end
+$var wire    1  aaabi  rxOv_Rx       $end
+$var wire    1  aaabj  rxPe_Rx       $end
+$var wire    1  aaabk  rxRxf_Rx       $end
+$var wire    1  aaabl  txBusy_Rx       $end
+$var wire    1  aaabm  txNf_Rx       $end
+$var wire    1  aaabn  txTxe_Rx       $end
+$var wire    1  aaabo  pSlvErrif_Tx       $end
+$var wire    1  aaabp  pReadyif_Tx       $end
+$var wire   32  aaabq  pRDataif_Tx [31:0]  $end
+$var wire    8  aaabr  ctrlDataif_Tx [7:0]  $end
+$var wire    1  aaabs  ctrlDataRdif_Tx       $end
+$var wire    2  aaabt  ctrlRxtif_Tx [1:0]  $end
+$var wire    2  aaabu  ctrlTxtif_Tx [1:0]  $end
+$var wire    1  aaabv  ctrlShiftTxif_Tx       $end
+$var wire    1  aaabw  ctrlShiftRxif_Tx       $end
+$var wire    1  aaabx  ctrlEpif_Tx       $end
+$var wire    1  aaaby  ctrlD9if_Tx       $end
+$var wire    1  aaabz  ctrlTxEnif_Tx       $end
+$var wire    1  aaaca  ctrlEnif_Tx       $end
+$var wire    8  aaacb  rxDataif_Tx [7:0]  $end
+$var wire    1  aaacc  rxFeif_Tx       $end
+$var wire    1  aaacd  rxPeif_Tx       $end
+$var wire    1  aaace  rxOvif_Tx       $end
+$var wire    1  aaacf  rxRxfif_Tx       $end
+$var wire    1  aaacg  rxBusyif_Tx       $end
+$var wire    1  aaach  rxNeif_Tx       $end
+$var wire    1  aaaci  txTxeif_Tx       $end
+$var wire    1  aaacj  txBusyif_Tx       $end
+$var wire    1  aaack  txNfif_Tx       $end
+$var wire    4  aaacl  pStrbif_Tx [3:0]  $end
+$var wire   32  aaacm  pWDataif_Tx [31:0]  $end
+$var wire   32  aaacn  pAddrif_Tx [31:0]  $end
+$var wire    1  aaaco  pEnableif_Tx       $end
+$var wire    1  aaacp  pSelif_Tx       $end
+$var wire    1  aaacq  pWriteif_Tx       $end
+$var wire    1  aaacr  pResetNif_Tx       $end
+$var wire    1  aaacs  pClkif_Tx       $end
+$var wire    1  aaact  ctrlFIf_Rx       $end
+$var wire    1  aaacu  ctrlPIf_Rx       $end
+$var wire    1  aaacv  ctrlOIf_Rx       $end
+$var wire    1  aaacw  ctrlRIf_Rx       $end
+$var wire    1  aaacx  ctrlTIf_Rx       $end
+$var wire    1  aaacy  pSlvErr_Rx       $end
+$var wire    1  aaacz  pReady_Rx       $end
+$var wire   32  aaada  pRData_Rx [31:0]  $end
+$var wire    4  aaadb  pStrb_Rx [3:0]  $end
+$var wire   32  aaadc  pWData_Rx [31:0]  $end
+$var wire   32  aaadd  pAddr_Rx [31:0]  $end
+$var wire    1  aaade  pEnable_Rx       $end
+$var wire    1  aaadf  pSel_Rx       $end
+$var wire    1  aaadg  pWrite_Rx       $end
+$var wire    1  aaadh  pResetN_Rx       $end
+$var wire    1  aaadi  pClk_Rx       $end
+$var wire    1  aaadj  ctrlFIf_Tx       $end
+$var wire    1  aaadk  ctrlPIf_Tx       $end
+$var wire    1  aaadl  ctrlOIf_Tx       $end
+$var wire    1  aaadm  ctrlRIf_Tx       $end
+$var wire    1  aaadn  ctrlTIf_Tx       $end
+$var wire    1  aaado  pSlvErr_Tx       $end
+$var wire    1  aaadp  pReady_Tx       $end
+$var wire   32  aaadq  pRData_Tx [31:0]  $end
+$var wire    4  aaadr  pStrb_Tx [3:0]  $end
+$var wire   32  aaads  pWData_Tx [31:0]  $end
+$var wire   32  aaadt  pAddr_Tx [31:0]  $end
+$var wire    1  aaadu  pEnable_Tx       $end
+$var wire    1  aaadv  pSel_Tx       $end
+$var wire    1  aaadw  pWrite_Tx       $end
+$var wire    1  aaadx  pResetN_Tx       $end
+$var wire    1  aaady  pClk_Tx       $end
+$upscope $end
+$enddefinitions  $end
+
+$comment
+All initial values are dumped below at time 0 sec = 0 timescale units.
+$end
+
+$dumpvars
+0aaaaa
+b0 aaaab
+0aaaac
+0aaaad
+0aaaae
+b0 aaaaf
+1aaaag
+0aaaah
+1aaaai
+b0 aaaaj
+0aaaak
+b0 aaaal
+0aaaam
+0aaaan
+0aaaao
+0aaaap
+0aaaaq
+0aaaar
+1aaaas
+1aaaat
+0aaaau
+b0 aaaav
+0aaaaw
+0aaaax
+0aaaay
+b0 aaaaz
+1aaaba
+0aaabb
+1aaabc
+b0 aaabd
+0aaabe
+b0 aaabf
+0aaabg
+0aaabh
+0aaabi
+0aaabj
+0aaabk
+0aaabl
+1aaabm
+1aaabn
+0aaabo
+1aaabp
+b0 aaabq
+b0 aaabr
+0aaabs
+b0 aaabt
+b0 aaabu
+0aaabv
+1aaabw
+0aaabx
+0aaaby
+1aaabz
+0aaaca
+b0 aaacb
+0aaacc
+0aaacd
+0aaace
+0aaacf
+0aaacg
+0aaach
+1aaaci
+0aaacj
+1aaack
+b0 aaacl
+b0 aaacm
+b0 aaacn
+0aaaco
+0aaacp
+0aaacq
+0aaacr
+1aaacs
+0aaact
+0aaacu
+0aaacv
+0aaacw
+0aaacx
+0aaacy
+1aaacz
+b0 aaada
+b0 aaadb
+b0 aaadc
+b0 aaadd
+0aaade
+0aaadf
+0aaadg
+0aaadh
+1aaadi
+0aaadj
+0aaadk
+0aaadl
+0aaadm
+0aaadn
+0aaado
+1aaadp
+b0 aaadq
+b0 aaadr
+b0 aaads
+b0 aaadt
+0aaadu
+0aaadv
+0aaadw
+0aaadx
+1aaady
+$end
+
+#10000
+1aaacr
+1aaadh
+1aaadx
+
+#12500
+0aaacs
+0aaady
+
+#21500
+0aaadi
+
+#25000
+1aaacs
+1aaady
+
+#37500
+0aaacs
+0aaady
+
+#43000
+1aaadi
+
+#50000
+b10000010 aaaab
+b10000010 aaabr
+b1111 aaacl
+b10000010 aaacm
+b1000 aaacn
+1aaacp
+1aaacq
+1aaacs
+b1111 aaadr
+b10000010 aaads
+b1000 aaadt
+1aaadv
+1aaadw
+1aaady
+
+#62500
+0aaacs
+0aaady
+
+#64500
+0aaadi
+
+#75000
+1aaaco
+1aaacs
+1aaadu
+1aaady
+
+#86000
+1aaadi
+
+#87500
+0aaacs
+0aaady
+
+#100000
+0aaaag
+1aaabo
+b10000010 aaabq
+0aaabw
+b0 aaacl
+0aaaco
+0aaacq
+1aaacs
+1aaado
+b10000010 aaadq
+b0 aaadr
+0aaadu
+0aaadw
+1aaady
+
+#107500
+0aaadi
+
+#112500
+0aaacs
+0aaady
+
+#125000
+0aaabo
+1aaaco
+1aaacs
+0aaado
+1aaadu
+1aaady
+
+#129000
+1aaadi
+
+#137500
+0aaacs
+0aaady
+
+#150000
+b100011 aaaab
+b100000 aaabq
+b100011 aaabr
+b1111 aaacl
+b100011 aaacm
+b100 aaacn
+0aaaco
+1aaacq
+1aaacs
+b100000 aaadq
+b1111 aaadr
+b100011 aaads
+b100 aaadt
+0aaadu
+1aaadw
+1aaady
+
+#150500
+0aaadi
+
+#162500
+0aaacs
+0aaady
+
+#172000
+1aaadi
+
+#175000
+1aaaco
+1aaacs
+1aaadu
+1aaady
+
+#187500
+0aaacs
+0aaady
+
+#193500
+0aaadi
+
+#200000
+1aaaaa
+1aaaad
+1aaabo
+b100011 aaabq
+1aaaby
+1aaaca
+b0 aaacl
+0aaaco
+0aaacq
+1aaacs
+1aaado
+b100011 aaadq
+b0 aaadr
+0aaadu
+0aaadw
+1aaady
+
+#212500
+0aaacs
+0aaady
+
+#215000
+1aaadi
+
+#225000
+1aaaar
+0aaaat
+0aaabo
+b10100011 aaabq
+0aaaci
+1aaacj
+1aaaco
+1aaacs
+0aaado
+b10100011 aaadq
+1aaadu
+1aaady
+
+#236500
+0aaadi
+
+#237500
+0aaacs
+0aaady
+
+#250000
+b1001011 aaaav
+0aaaco
+0aaacp
+1aaacs
+b1111 aaadb
+b1001011 aaadc
+b1000 aaadd
+1aaadf
+1aaadg
+0aaadu
+0aaadv
+1aaady
+
+#258000
+1aaade
+1aaadi
+
+#262500
+0aaacs
+0aaady
+
+#275000
+1aaacs
+1aaady
+
+#279500
+0aaadi
+
+#287500
+0aaacs
+0aaady
+
+#300000
+1aaacs
+1aaady
+
+#301000
+0aaaba
+1aaacy
+b1001011 aaada
+b0 aaadb
+0aaade
+0aaadg
+1aaadi
+
+#312500
+0aaacs
+0aaady
+
+#322500
+0aaadi
+
+#325000
+1aaacs
+1aaady
+
+#337500
+0aaacs
+0aaady
+
+#344000
+0aaacy
+1aaade
+1aaadi
+
+#350000
+1aaacs
+1aaady
+
+#362500
+0aaacs
+0aaady
+
+#365500
+0aaadi
+
+#375000
+1aaacs
+1aaady
+
+#387000
+b1000 aaaav
+b0 aaada
+b1111 aaadb
+b1000 aaadc
+b0 aaadd
+0aaade
+1aaadg
+1aaadi
+
+#387500
+0aaacs
+0aaady
+
+#400000
+1aaacs
+1aaady
+
+#408500
+0aaadi
+
+#412500
+0aaacs
+0aaady
+
+#425000
+1aaacs
+1aaady
+
+#430000
+1aaade
+1aaadi
+
+#437500
+0aaacs
+0aaady
+
+#450000
+1aaacs
+1aaady
+
+#451500
+0aaadi
+
+#462500
+0aaacs
+0aaady
+
+#473000
+b10 aaaaz
+1aaacy
+b1000 aaada
+b0 aaadb
+0aaade
+0aaadg
+1aaadi
+
+#475000
+1aaacs
+1aaady
+
+#487500
+0aaacs
+0aaady
+
+#494500
+0aaadi
+
+#500000
+1aaacs
+1aaady
+
+#512500
+0aaacs
+0aaady
+
+#516000
+0aaacy
+1aaade
+1aaadi
+
+#525000
+1aaacs
+1aaady
+
+#537500
+0aaacs
+0aaadi
+0aaady
+
+#550000
+1aaacs
+1aaady
+
+#559000
+0aaade
+0aaadf
+1aaadi
+
+#562500
+0aaacs
+0aaady
+
+#575000
+1aaacs
+1aaady
+
+#580500
+0aaadi
+
+#587500
+0aaacs
+0aaady
+
+#600000
+0aaaas
+b10000011 aaabq
+0aaack
+1aaacs
+b10000011 aaadq
+1aaady
+
+#602000
+1aaadi
+

@@ -1,0 +1,71 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Tue Jan 07 23:45:20 2020
+[*]
+[dumpfile] "D:\SystemC\7_UVM\apbUartUvmSystemC-test\sim\uart_waveform.vcd"
+[dumpfile_mtime] "Tue Jan 07 23:43:26 2020"
+[dumpfile_size] 6596
+[savefile] "D:\SystemC\7_UVM\apbUartUvmSystemC-test\sim\format.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-16.279842 175000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 197
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 143
+@28
+SystemC.pResetN_Tx
+SystemC.pClk_Tx
+@c00022
+SystemC.pAddr_Tx[31:0]
+@28
+(0)SystemC.pAddr_Tx[31:0]
+(1)SystemC.pAddr_Tx[31:0]
+(2)SystemC.pAddr_Tx[31:0]
+(3)SystemC.pAddr_Tx[31:0]
+(4)SystemC.pAddr_Tx[31:0]
+(5)SystemC.pAddr_Tx[31:0]
+(6)SystemC.pAddr_Tx[31:0]
+(7)SystemC.pAddr_Tx[31:0]
+(8)SystemC.pAddr_Tx[31:0]
+(9)SystemC.pAddr_Tx[31:0]
+(10)SystemC.pAddr_Tx[31:0]
+(11)SystemC.pAddr_Tx[31:0]
+(12)SystemC.pAddr_Tx[31:0]
+(13)SystemC.pAddr_Tx[31:0]
+(14)SystemC.pAddr_Tx[31:0]
+(15)SystemC.pAddr_Tx[31:0]
+(16)SystemC.pAddr_Tx[31:0]
+(17)SystemC.pAddr_Tx[31:0]
+(18)SystemC.pAddr_Tx[31:0]
+(19)SystemC.pAddr_Tx[31:0]
+(20)SystemC.pAddr_Tx[31:0]
+(21)SystemC.pAddr_Tx[31:0]
+(22)SystemC.pAddr_Tx[31:0]
+(23)SystemC.pAddr_Tx[31:0]
+(24)SystemC.pAddr_Tx[31:0]
+(25)SystemC.pAddr_Tx[31:0]
+(26)SystemC.pAddr_Tx[31:0]
+(27)SystemC.pAddr_Tx[31:0]
+(28)SystemC.pAddr_Tx[31:0]
+(29)SystemC.pAddr_Tx[31:0]
+(30)SystemC.pAddr_Tx[31:0]
+(31)SystemC.pAddr_Tx[31:0]
+@1401200
+-group_end
+@28
+SystemC.pSel_Tx
+SystemC.pEnable_Tx
+@29
+SystemC.pWrite_Tx
+@22
+SystemC.pWData_Tx[31:0]
+SystemC.pRData_Tx[31:0]
+@28
+SystemC.pReady_Tx
+SystemC.pSlvErr_Tx
+@22
+SystemC.pStrb_Tx[3:0]
+[pattern_trace] 1
+[pattern_trace] 0

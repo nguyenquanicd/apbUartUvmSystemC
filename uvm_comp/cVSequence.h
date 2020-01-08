@@ -13,7 +13,7 @@
 #include <systemc>
 #include <tlm.h>
 #include <uvm>
-#include "uMacro.h"
+#include "macro.h"
 #include "cCommonSequence.h"
 #include "cApbTransaction.h"
 
@@ -23,8 +23,13 @@ class cApbUartVirSequence: public uvm::uvm_sequence<>
         cApbWriteSequence<cApbTransaction>* WriteSeq;
         cApbReadSequence<cApbTransaction>* ReadSeq;
         
-        cApbUartVirSequence(const std::string& name = "cApbUartVirSequence") : uvm_sequence<>(name){}
-        
+        cApbUartVirSequence(const std::string& name = "cApbUartVirSequence") : uvm_sequence<>(name){
+            std::cout << "abccccc             " << std::endl;
+        }
+        ~cApbUartVirSequence(){
+            delete WriteSeq;
+            delete ReadSeq;
+        }       
         UVM_OBJECT_UTILS(cApbUartVirSequence);
         UVM_DECLARE_P_SEQUENCER(cVSequencer<cApbTransaction>);
           
@@ -39,10 +44,21 @@ class cApbUartVirSequence: public uvm::uvm_sequence<>
         void body(){          
             UVM_INFO(this->get_name(), "Virtual sequence start here", uvm::UVM_NONE);
             sc_core::wait(50,SC_NS);
-            ApbWriteTX(0x08,0x32);
-            ApbReadTX(0x08,0x32,0xFF);
-            sc_core::wait(100,SC_NS);
-            UVM_INFO(this->get_name(), "Sequence finished here", uvm::UVM_NONE);          
+            ApbWriteTX(0x8,0x82);
+            //ApbWriteRandTX(0x08);
+            ApbReadTX(0x08,0x82,0xFF);
+            
+            ApbWriteTX(0x4,0x23);
+            ApbReadTX(0x4,0x23,0xFF);
+            
+            ApbWriteRX(0x8,0x4B);
+            ApbReadRX(0x8,0x4B,0xFF);
+            
+            ApbWriteRX(0x0,0x8);
+            ApbReadRX(0x0,0x8,0xFF);            
+            sc_core::wait(50,SC_NS);
+            UVM_INFO(this->get_name(), "Sequence finished here", uvm::UVM_NONE);
+            sc_core::sc_stop();
         }
         
         //void post_body()

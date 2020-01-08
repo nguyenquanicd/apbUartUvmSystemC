@@ -50,6 +50,17 @@ struct package{
         }
 };
 
+class  package_constraint : public scv_constraint_base 
+{
+    public:
+        scv_smart_ptr<package> packageSmrPtr;
+        SCV_CONSTRAINT_CTOR(package_constraint){
+            SCV_CONSTRAINT(packageSmrPtr->apbConEn() == 0);
+            SCV_CONSTRAINT(packageSmrPtr->pwdata() >= 0 && packageSmrPtr->pwdata() <= 0xFF);
+            SCV_CONSTRAINT(packageSmrPtr->pstrb() == 0xF);
+        }
+};
+
 template <typename REQ = uvm::uvm_sequence_item, typename RSP = REQ>
 class cApbWriteSequence : public uvm::uvm_sequence<REQ,RSP>
 {
@@ -57,35 +68,47 @@ class cApbWriteSequence : public uvm::uvm_sequence<REQ,RSP>
   bool conEn;
   sc_dt::sc_uint<32> addr;
   sc_dt::sc_uint<32> wdata;
-  sc_dt::sc_uint<4>  strb;
-  
-  cApbWriteSequence( const std::string& name ) : uvm::uvm_sequence<REQ,RSP>( name )
-  {
+  sc_dt::sc_uint<4>  strb; 
+  cApbWriteSequence(const std::string& name, sc_dt::sc_uint<32> address, sc_dt::sc_uint<32>  data) : uvm::uvm_sequence<REQ,RSP>( name )
+  { 
     std::cout << sc_core::sc_time_stamp() << ": Construct sequence " << name << std::endl;
+    addr = address;
+    wdata = data;
+    conEn = 0;
+    strb = 0xF;
+  } 
+ 
+  cApbWriteSequence(const std::string& name, sc_dt::sc_uint<32> address = 0x0) : uvm::uvm_sequence<REQ,RSP>( name )
+  { 
+    std::cout << sc_core::sc_time_stamp() << ": Construct sequence with random data " << name << std::endl;
+    addr = address;
   } 
   
-  //~cApbWriteSequence(){
-  //}
+  ~cApbWriteSequence(){}
    
   UVM_OBJECT_PARAM_UTILS(cApbWriteSequence<REQ,RSP>);
   UVM_DECLARE_P_SEQUENCER(cApbUartSequencer<REQ>);
   
+  void random(){
+      package_constraint constraint("constraint");
+      constraint.packageSmrPtr->pwdata.next();
+      constraint.packageSmrPtr->pstrb.next();
+      constraint.packageSmrPtr->apbConEn.next();
+      constraint.packageSmrPtr->paddr.next();
+      //conEn = constraint.packageSmrPtr->apbConEn;
+      wdata  = constraint.packageSmrPtr->pwdata;
+      std::cout << "data value " << wdata << std::endl;
+      strb  = constraint.packageSmrPtr->pstrb;
+      //addr  = constraint.packageSmrPtr->paddr;
+     }
+  
   void body()
   {    
-    REQ* coApbTransaction;
-    scv_smart_ptr<package> packageSmrPtr("packageSmrPtr");   
+    REQ* coApbTransaction; 
+    //scv_smart_ptr<package> packageSmrPtr("packageSmrPtr");   
     
     UVM_INFO(this->get_name(), "Starting write sequence ", uvm::UVM_MEDIUM);
-      coApbTransaction = new REQ();
-      packageSmrPtr->apbConEn.next();
-      packageSmrPtr->pwdata.next();
-      packageSmrPtr->pstrb.next();
-      packageSmrPtr->paddr.next();
-      
-      conEn = packageSmrPtr->apbConEn;
-      wdata = packageSmrPtr->pwdata;
-      strb  = packageSmrPtr->pstrb;
-      addr  = packageSmrPtr->paddr;
+      coApbTransaction = new REQ();   
       
       coApbTransaction->apbSeqEn = 1;     
       coApbTransaction->pwrite   = 1;
@@ -96,6 +119,10 @@ class cApbWriteSequence : public uvm::uvm_sequence<REQ,RSP>
       std::cout << sc_core::sc_time_stamp() << " Start item " << std::endl;
       this->start_item(coApbTransaction);
       std::cout << sc_core::sc_time_stamp() << " Finish item" << std::endl;
+      std::ostringstream str;
+          str << "Address: '" << addr.to_string().c_str() << "' Data: '"
+              << wdata.to_string().c_str() << "'";
+      UVM_INFO("TRANSACTION INFO", str.str(), uvm::UVM_MEDIUM);      
       this->finish_item(coApbTransaction);
     UVM_INFO(this->get_name(), "Finishing sequence ", uvm::UVM_MEDIUM);
   }
@@ -112,9 +139,12 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
   sc_dt::sc_uint<32> mask;
   sc_dt::sc_uint<32> addr;
   sc_dt::sc_uint<32> expData;
-  cApbReadSequence( const std::string& name ) : uvm::uvm_sequence<REQ,RSP>( name )
+  cApbReadSequence( const std::string& name = "cApbMasterReadSeq", sc_dt::sc_uint<32> address = 0x0, sc_dt::sc_uint<32> data = 0x0, sc_dt::sc_uint<32> umask = 0x0) : uvm::uvm_sequence<REQ,RSP>( name )
   {
     std::cout << sc_core::sc_time_stamp() << ": constructor " << name << std::endl;
+    addr = address;
+    expData = data;
+    mask = umask;
   } 
   
   //~cApbReadSequence(){
@@ -125,17 +155,17 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
   void body()
   {    
     REQ* coApbTransaction;
-    scv_smart_ptr<package> packageSmrPtr("packageSmrPtr");   
+    package_constraint constraint("constraint");    
+    //scv_smart_ptr<package> packageSmrPtr("packageSmrPtr");   
     UVM_INFO(this->get_name(), "Starting read sequence ", uvm::UVM_MEDIUM);
       coApbTransaction = new REQ();
      
-      packageSmrPtr->paddr.next();     
-      packageSmrPtr->apbConEn.next();
+      //packageSmrPtr->paddr.next();     
+      //packageSmrPtr->apbConEn.next();
       
-      addr  = packageSmrPtr->paddr;
-      conEn = packageSmrPtr->apbConEn;
+      //addr  = packageSmrPtr->paddr;
+      conEn = constraint.packageSmrPtr->apbConEn;
       
-      std::cout << sc_core::sc_time_stamp() << ": " << this->get_full_name() << " Get random value "  << std::endl;
       coApbTransaction->pwrite   = 0;
       coApbTransaction->apbSeqEn = 1;
       coApbTransaction->paddr    = addr;      
@@ -146,6 +176,7 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
       std::cout << sc_core::sc_time_stamp() << " Finish item" << std::endl;
       this->finish_item(coApbTransaction);
     compareResult = (coApbTransaction->prdata ^ expData) & mask;
+    cout << "mask " << mask << " compareResult " << compareResult << std::endl;
     if(compareResult){
         std::ostringstream str;
             str << "Address: '" << addr.to_string().c_str() << "' Expected data: '"
