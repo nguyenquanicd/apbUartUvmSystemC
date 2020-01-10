@@ -3,12 +3,12 @@
 # by command number at the end of each define line.
 # User can disable or comment out define line by #
 
-instDutTop 1
-instDutTop.InstApbUartTop_0 1
-instDutTop.InstApbUartTop_0.InstApbUartApbIf 1
-instDutTop.InstApbUartTop_0.InstApbUartReciever 1
-instDutTop.InstApbUartTop_0.InstApbUartTransmitter 1
-instDutTop.InstApbUartTop_1 1
-instDutTop.InstApbUartTop_1.InstApbUartApbIf 1
-instDutTop.InstApbUartTop_1.InstApbUartReciever 1
-instDutTop.InstApbUartTop_1.InstApbUartTransmitter 1
+dut_top 1
+dut_top.InstApbUartTop_0 1
+dut_top.InstApbUartTop_0.InstApbUartApbIf 1
+dut_top.InstApbUartTop_0.InstApbUartReciever 1
+dut_top.InstApbUartTop_0.InstApbUartTransmitter 1
+dut_top.InstApbUartTop_1 1
+dut_top.InstApbUartTop_1.InstApbUartApbIf 1
+dut_top.InstApbUartTop_1.InstApbUartReciever 1
+dut_top.InstApbUartTop_1.InstApbUartTransmitter 1
