@@ -24,7 +24,6 @@ class cApbUartVirSequence: public uvm::uvm_sequence<>
         cApbReadSequence<cApbTransaction>* ReadSeq;
         
         cApbUartVirSequence(const std::string& name = "cApbUartVirSequence") : uvm_sequence<>(name){
-            std::cout << "abccccc             " << std::endl;
         }
         ~cApbUartVirSequence(){
             delete WriteSeq;

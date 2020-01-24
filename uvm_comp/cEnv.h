@@ -16,6 +16,7 @@
 
 #include "cApbMasterAgent.h"
 #include "cVSequencer.h" 
+#include "cScoreboard.h"
 
 #include "cApbMasterAgent.h"
 #include "cApbTransaction.h"
@@ -26,9 +27,9 @@ class cEnv : public uvm::uvm_env
 {
         public:
         //Instance
-        cApbUartAgent* coApbUartAgentTx;
-        cApbUartAgent* coApbUartAgentRx;
-        //cApbUartScoreboard* coApbUartScoreboard;
+        cApbMasterAgent* coApbMasterAgentTx;
+        cApbMasterAgent* coApbMasterAgentRx;
+        cScoreboard* coScoreboard;
         cVSequencer<cApbTransaction>* coVSequencer;
         
         UVM_COMPONENT_UTILS(cEnv);
@@ -46,17 +47,17 @@ class cEnv : public uvm::uvm_env
              std::cout << sc_core::sc_time_stamp() << " Build environemnt " << "\n" <<std::endl;
              uvm::uvm_env::build_phase(phase);
              
-             coApbUartAgentTx = cApbUartAgent::type_id::create("coApbUartAgentTx", this);
-             assert(coApbUartAgentTx);
+             coApbMasterAgentTx = cApbMasterAgent::type_id::create("coApbMasterAgentTx", this);
+             assert(coApbMasterAgentTx);
              
-             coApbUartAgentRx = cApbUartAgent::type_id::create("coApbUartAgentRx", this);
-             assert(coApbUartAgentRx);
+             coApbMasterAgentRx = cApbMasterAgent::type_id::create("coApbMasterAgentRx", this);
+             assert(coApbMasterAgentRx);
              
              coVSequencer = cVSequencer<cApbTransaction>::type_id::create("coVSequencer", this);
              assert(coVSequencer);
  
-             //coScoreboard = cApbUartScoreboard::type_id::create("coApbUartScoreboard", this);
-             //assert(coScoreboard)
+             coScoreboard = cScoreboard::type_id::create("coScoreboard", this);
+             assert(coScoreboard);
              //std::cout << sc_core::sc_time_stamp() << " Goi VSequence -------- " << name() << "\n" << std::endl;
              //uvm::uvm_config_db<uvm::uvm_object_wrapper*>
              //::set(this,"coVSequencer.run_phase","default_sequence",
@@ -66,10 +67,12 @@ class cEnv : public uvm::uvm_env
          void connect_phase(uvm::uvm_phase& phase)
          {
              std::cout << sc_core::sc_time_stamp() << " Connect phase " << name() << "\n" << std::endl;
-             coVSequencer->coApbUartAgentTx = coApbUartAgentTx;
-             coVSequencer->coApbUartAgentRx = coApbUartAgentRx;
-             //coApbUartAgentTx->coApbUartMonitor->item_collected_port.connect(cApbUartScoreboard->..)
-             //coApbUartAgentRx->coApbUartMonitor-> ... 
+             coVSequencer->coApbMasterAgentTx = dynamic_cast<cApbMasterAgent*>(this->coApbMasterAgentTx);
+             coVSequencer->coApbMasterAgentRx = dynamic_cast<cApbMasterAgent*>(this->coApbMasterAgentRx);
+             
+             coApbMasterAgentTx->coApbMasterMonitor->ap_toScoreboard.connect(coScoreboard->frmMonitorTX_listener_imp);
+             coApbMasterAgentRx->coApbMasterMonitor->ap_toScoreboard.connect(coScoreboard->frmMonitorRX_listener_imp);
+             coApbMasterAgentTx->coApbMasterMonitor->preset_toScoreboard.connect(coScoreboard->resetfrmTX_listener_imp);             
          }
 
 }; // class cVSequencer

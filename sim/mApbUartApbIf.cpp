@@ -136,7 +136,8 @@ void mApbUartApbIf::pmCombination() {
     //Error conditions
     if ((pAddr_lsb.range(1,0) != 0x0)
         || (pAddr_lsb >= 0x18)
-        || ((~pStrb_all1) && writeEn && regSel)) {
+        //|| ((~pStrb_all1) && writeEn && regSel)) {
+        || ((!pStrb_all1) && writeEn && regSel)) {
       errCondition.write(1);
     }
     else {

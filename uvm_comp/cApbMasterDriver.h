@@ -16,28 +16,28 @@
 #include "cApbTransaction.h"
 
 template <class REQ>
-class cApbUartDriver : public uvm::uvm_driver<REQ>
+class cApbMasterDriver : public uvm::uvm_driver<REQ>
 {
     public:
-        ifApbUart* uart_vifApbMaster; //component
+        ifApbMaster* uart_vifApbMaster; //component
  
-        cApbUartDriver(uvm::uvm_component_name name) : uvm::uvm_driver<REQ>(name)
+        cApbMasterDriver(uvm::uvm_component_name name) : uvm::uvm_driver<REQ>(name)
         {}
         
-        UVM_COMPONENT_PARAM_UTILS(cApbUartDriver<REQ>);
+        UVM_COMPONENT_PARAM_UTILS(cApbMasterDriver<REQ>);
         
         void build_phase(uvm::uvm_phase& phase)
         {
             uvm::uvm_driver<REQ>::build_phase(phase);
-            if(!uvm::uvm_config_db<ifApbUart*>::get(this,"*","vifApbMaster",uart_vifApbMaster))
+            if(!uvm::uvm_config_db<ifApbMaster*>::get(this,"*","vifApbMaster",uart_vifApbMaster))
                 UVM_FATAL(this->name(), "Virtual interface not defined! Simulation aborted!");
         }
         
         void run_phase(uvm::uvm_phase& phase){
             std::cout << sc_core::sc_time_stamp() << ": " << this->name() << " " << phase.get_name() << "..." << std::endl;              
             SC_FORK
-                sc_core::sc_spawn(sc_bind(&cApbUartDriver::reset_all, this)),         
-                sc_core::sc_spawn(sc_bind(&cApbUartDriver::get_seq_and_drive, this)) 
+                sc_core::sc_spawn(sc_bind(&cApbMasterDriver::reset_all, this)),         
+                sc_core::sc_spawn(sc_bind(&cApbMasterDriver::get_seq_and_drive, this)) 
             SC_JOIN 
         }
         
@@ -59,15 +59,17 @@ class cApbUartDriver : public uvm::uvm_driver<REQ>
             while(true){
                 this->seq_item_port->get_next_item(req);
                 convert_seq2apb(req);
-                this->seq_item_port->item_done();   
+                this->seq_item_port->item_done();
+               std::cout << sc_time_stamp() << "DECMN BUG4  " << req.prdata << std::endl;
+               std::cout << sc_time_stamp() << "DECMN BUG4  " << &req << std::endl;
             }
         }
         
-        void convert_seq2apb(REQ& user_req){
+        void convert_seq2apb(REQ &user_req){
 
             if(user_req.apbSeqEn){
                 
-                if(user_req.apbConEn){
+                if(user_req.apbConEn == 0){
                     wait(uart_vifApbMaster->pclk.posedge_event());                     
                 }
          
@@ -79,22 +81,26 @@ class cApbUartDriver : public uvm::uvm_driver<REQ>
                     uart_vifApbMaster->pwdata.write(user_req.pwdata);
                 } else {
                     user_req.prdata = uart_vifApbMaster->prdata.read();
-                    std::cout << "DECMN BUG " << uart_vifApbMaster->prdata.read() << std::endl;
+                    std::cout << sc_time_stamp() <<" DECMN BUG2 " << user_req.prdata << std::endl;
+                    std::cout << sc_time_stamp() <<" DECMN BUG2 " << user_req << std::endl;
+                    wait(1,SC_NS);
                 }
                 
                 wait(uart_vifApbMaster->pclk.posedge_event());
                 uart_vifApbMaster->penable.write(1);
-                wait(uart_vifApbMaster->pclk.posedge_event());
                 user_req.pslverr = uart_vifApbMaster->pslverr.read();
+                wait(uart_vifApbMaster->pclk.posedge_event());                
                 if(uart_vifApbMaster->psel && uart_vifApbMaster->penable && uart_vifApbMaster->pready){
                         uart_vifApbMaster->psel = 0;
                         uart_vifApbMaster->penable = 0;
-                }         
+                }           
             } else {
                 uart_vifApbMaster->psel = 0;
                 uart_vifApbMaster->penable = 0;
             }
 //            sc_core::wait(1, sc_core::SC_NS);
+            std::cout << sc_time_stamp() << "DECMN BUG3  " << uart_vifApbMaster->prdata.read() << std::endl;
+            
         }
         
 };   

@@ -37,7 +37,7 @@ class cScoreboard : public uvm::uvm_scoreboard
   sc_uint<1> rst_flg;
   
   // string format
-  char char_string[];
+  char char_string[1024];
   std::string info;
   std::string warning;
   std::string error;
@@ -64,13 +64,13 @@ class cScoreboard : public uvm::uvm_scoreboard
     uvm::uvm_config_db<uvm_object*>::set(this, "frmMonitorTX_listener", "coScoreboard", this);
     uvm::uvm_config_db<uvm_object*>::set(this, "frmMonitorRX_listener", "coScoreboard", this);
     
-    resetfrmTX_listener = xmt_subscriber::type_id::create("resetfrmTX_listener", this);
+    resetfrmTX_listener = resetfrmTX_subscriber::type_id::create("resetfrmTX_listener", this);
     assert(resetfrmTX_listener);
 
-    frmMonitorTX_listener = rcv_subscriber::type_id::create("frmMonitorTX_listener", this);
+    frmMonitorTX_listener = frmMonitorTX_subscriber::type_id::create("frmMonitorTX_listener", this);
     assert(frmMonitorTX_listener);
     
-    frmMonitorRX_listener = rcv_subscriber::type_id::create("frmMonitorRX_listener", this);
+    frmMonitorRX_listener = frmMonitorRX_subscriber::type_id::create("frmMonitorRX_listener", this);
     assert(frmMonitorRX_listener);
   }
 
@@ -88,7 +88,7 @@ class cScoreboard : public uvm::uvm_scoreboard
 		  rst_flg = 0b1;
       sprintf(char_string, "[%d] preset_n signal is acting", sc_time());
       info = char_string;
-      UVM_INFO("SB RESET", info, UVM_LOW);
+      UVM_INFO("SB RESET", info, uvm::UVM_LOW);
 		} else {
 		  rst_flg = 0b0;
     }
@@ -102,7 +102,7 @@ class cScoreboard : public uvm::uvm_scoreboard
       //-------------------------------------
 		  // Update the enable status
 		  if (TransOnTX.pwrite && (TransOnTX.paddr.range(15,0) == 0x4)) {
-		      uartEnTX = TransOnTX.pwdata(0);
+		      uartEnTX = TransOnTX.pwdata[0];
 		  }
       // Store transmit data to queues when UART is enabled
       // Only store 8 LSB bits, other MSB bits are mapped to 0
@@ -120,7 +120,7 @@ class cScoreboard : public uvm::uvm_scoreboard
 		    if ((TransOnTX.prdata & 0xff) == queueCompRX) {
           sprintf(char_string, "[%d] SUCCESS on UART-TX: transfer data = %02X, queueTransRX size = %d", sc_time(), TransOnTX.prdata, queueTransRX.size());
           info = char_string;
-				  UVM_INFO("SB INFO", info, UVM_LOW);
+				  UVM_INFO("SB INFO", info, uvm::UVM_LOW);
 				} else {
           sprintf(char_string, "[%d] FAIL on UART-TX: read data = %02X, expected data =%02X, queueTransRX size = %d", sc_time(), TransOnTX.prdata, queueCompRX, queueTransRX.size());
           error = char_string;
@@ -151,7 +151,7 @@ class cScoreboard : public uvm::uvm_scoreboard
       //-------------------------------------
 		  // Update the enable status
 		  if (TransOnRX.pwrite && (TransOnRX.paddr.range(15,0) == 0x4)) {
-		      uartEnRX = TransOnRX.pwdata(0);
+		      uartEnRX = TransOnRX.pwdata[0];
 		  }
       // Store transmit data to queues when UART is enabled
       // Only store 8 LSB bits, other MSB bits are mapped to 0
@@ -169,7 +169,7 @@ class cScoreboard : public uvm::uvm_scoreboard
 		    if ((TransOnRX.prdata & 0xff) == queueCompRX) {
           sprintf(char_string, "[%d] SUCCESS on UART-RX: transfer data = %02X, queueTransTX size = %d", sc_time(), TransOnRX.prdata, queueTransTX.size());
           info = char_string;
-          UVM_INFO("SB INFO", info, UVM_LOW);
+          UVM_INFO("SB INFO", info, uvm::UVM_LOW);
 				} else {
           sprintf(char_string, "[%d] FAIL on UART-RX: read data = %02X, expected data =%02X, queueTransTX size = %d", sc_time(), TransOnRX.prdata, queueCompTX, queueTransTX.size());
           error = char_string;

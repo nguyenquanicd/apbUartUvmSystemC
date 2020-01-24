@@ -28,34 +28,34 @@ int sc_main(int, char*[])
     TOP* dut_top = new TOP("dut_top");
     mPeripheral* peripheral = new mPeripheral("peripheral");
     
-    ifApbUart *vifApbUartTx = new ifApbUart("vifApbUartTx");
-    ifApbUart *vifApbUartRx = new ifApbUart("vifApbUartRx");
+    ifApbMaster *vifApbMasterTx = new ifApbMaster("vifApbMasterTx");
+    ifApbMaster *vifApbMasterRx = new ifApbMaster("vifApbMasterRx");
     ifInterrupt *vifInterruptTx = new ifInterrupt("vifInterruptTx");
     ifInterrupt *vifInterruptRx = new ifInterrupt("vifInterruptRx");
     
-    peripheral->uart0_clk(vifApbUartTx->pclk);
-    peripheral->uart1_clk(vifApbUartRx->pclk);
-    peripheral->uart0_pResetN(vifApbUartTx->preset_n);
-    peripheral->uart1_pResetN(vifApbUartRx->preset_n);
+    peripheral->uart0_clk(vifApbMasterTx->pclk);
+    peripheral->uart1_clk(vifApbMasterRx->pclk);
+    peripheral->uart0_pResetN(vifApbMasterTx->preset_n);
+    peripheral->uart1_pResetN(vifApbMasterRx->preset_n);
       
-    uvm::uvm_config_db<ifApbUart*>::set(0,"coTest.coEnv.coApbUartAgentTx.*","vifApbMaster", vifApbUartTx);
-    uvm::uvm_config_db<ifApbUart*>::set(0,"coTest.coEnv.coApbUartAgentRx.*","vifApbMaster", vifApbUartRx);
+    uvm::uvm_config_db<ifApbMaster*>::set(0,"coTest.coEnv.coApbMasterAgentTx.*","vifApbMaster", vifApbMasterTx);
+    uvm::uvm_config_db<ifApbMaster*>::set(0,"coTest.coEnv.coApbMasterAgentRx.*","vifApbMaster", vifApbMasterRx);
     
-    uvm::uvm_config_db<ifInterrupt*>::set(0,"coTest.coEnv.coApbUartAgentTx.*","vifInterrupt",vifInterruptTx);
-    uvm::uvm_config_db<ifInterrupt*>::set(0,"coTest.coEnv.coApbUartAgentRx.*","vifInterrupt",vifInterruptRx);
+    uvm::uvm_config_db<ifInterrupt*>::set(0,"coTest.coEnv.coApbMasterAgentTx.*","vifInterrupt",vifInterruptTx);
+    uvm::uvm_config_db<ifInterrupt*>::set(0,"coTest.coEnv.coApbMasterAgentRx.*","vifInterrupt",vifInterruptRx);
     
     //Connect to UART 0
-    dut_top->pclk_0(vifApbUartTx->pclk);
-    dut_top->preset_n_0(vifApbUartTx->preset_n);
-    dut_top->pwrite_0(vifApbUartTx->pwrite);
-    dut_top->psel_0(vifApbUartTx->psel);
-    dut_top->penable_0(vifApbUartTx->penable);
-    dut_top->pwdata_0(vifApbUartTx->pwdata);
-    dut_top->paddr_0(vifApbUartTx->paddr);
-    dut_top->pstrb_0(vifApbUartTx->pstrb);
-    dut_top->prdata_0(vifApbUartTx->prdata);
-    dut_top->pready_0(vifApbUartTx->pready);
-    dut_top->pslverr_0(vifApbUartTx->pslverr);
+    dut_top->pclk_0(vifApbMasterTx->pclk);
+    dut_top->preset_n_0(vifApbMasterTx->preset_n);
+    dut_top->pwrite_0(vifApbMasterTx->pwrite);
+    dut_top->psel_0(vifApbMasterTx->psel);
+    dut_top->penable_0(vifApbMasterTx->penable);
+    dut_top->pwdata_0(vifApbMasterTx->pwdata);
+    dut_top->paddr_0(vifApbMasterTx->paddr);
+    dut_top->pstrb_0(vifApbMasterTx->pstrb);
+    dut_top->prdata_0(vifApbMasterTx->prdata);
+    dut_top->pready_0(vifApbMasterTx->pready);
+    dut_top->pslverr_0(vifApbMasterTx->pslverr);
     #ifdef INTERRUPT_COM
     dut_top->ctrl_if_0(vifInterruptTx->ctrl_if);
     #else
@@ -67,17 +67,17 @@ int sc_main(int, char*[])
     #endif
     
     // Connect to UART 2    
-    dut_top->pclk_1(vifApbUartRx->pclk);
-    dut_top->preset_n_1(vifApbUartRx->preset_n);
-    dut_top->pwrite_1(vifApbUartRx->pwrite);
-    dut_top->psel_1(vifApbUartRx->psel);
-    dut_top->penable_1(vifApbUartRx->penable);
-    dut_top->pwdata_1(vifApbUartRx->pwdata);
-    dut_top->paddr_1(vifApbUartRx->paddr);
-    dut_top->pstrb_1(vifApbUartRx->pstrb);
-    dut_top->prdata_1(vifApbUartRx->prdata);
-    dut_top->pready_1(vifApbUartRx->pready);
-    dut_top->pslverr_1(vifApbUartRx->pslverr); 
+    dut_top->pclk_1(vifApbMasterRx->pclk);
+    dut_top->preset_n_1(vifApbMasterRx->preset_n);
+    dut_top->pwrite_1(vifApbMasterRx->pwrite);
+    dut_top->psel_1(vifApbMasterRx->psel);
+    dut_top->penable_1(vifApbMasterRx->penable);
+    dut_top->pwdata_1(vifApbMasterRx->pwdata);
+    dut_top->paddr_1(vifApbMasterRx->paddr);
+    dut_top->pstrb_1(vifApbMasterRx->pstrb);
+    dut_top->prdata_1(vifApbMasterRx->prdata);
+    dut_top->pready_1(vifApbMasterRx->pready);
+    dut_top->pslverr_1(vifApbMasterRx->pslverr); 
     #ifdef INTERRUPT_COM
     dut_top->ctrl_if_1(vifInterruptRx->ctrl_if);
     #else
@@ -104,8 +104,8 @@ int sc_main(int, char*[])
     
     delete dut_top;
     delete coTest;
-    delete vifApbUartTx;
-    delete vifApbUartRx;
+    delete vifApbMasterTx;
+    delete vifApbMasterRx;
     
     return 0;
 }

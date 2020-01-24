@@ -14,7 +14,7 @@
 #include <uvm>
 
 ///////
-class ifApbUart
+class ifApbMaster
 {
     public:
         sc_core::sc_signal<bool> pclk;
@@ -29,7 +29,7 @@ class ifApbUart
         sc_core::sc_signal<sc_dt::sc_uint<4> > pstrb;
         sc_core::sc_signal<bool> pready;
         sc_core::sc_signal<bool> pslverr;      
-        ifApbUart(const std::string& name) : pwdata("pwdata"), preset_n("preset_n"),psel("psel"),
+        ifApbMaster(const std::string& name) : pwdata("pwdata"), preset_n("preset_n"),psel("psel"),
                                              penable("penable"), pwrite("pwrite"), paddr("paddr"), 
                                              apbSeqEn("apbSeqEn"), prdata("prdata"), pstrb("pstrb"),
                                              pready("pready"), pslverr("pslverr")                                              

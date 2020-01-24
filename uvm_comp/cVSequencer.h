@@ -20,8 +20,8 @@
 template<class REQ>
 class cVSequencer : public uvm::uvm_sequencer<REQ>{
         public:
-        cApbUartAgent* coApbUartAgentTx;
-        cApbUartAgent* coApbUartAgentRx;
+        cApbMasterAgent* coApbMasterAgentTx;
+        cApbMasterAgent* coApbMasterAgentRx;
         
         UVM_COMPONENT_UTILS(cVSequencer)
         cVSequencer(uvm::uvm_component_name name) : uvm::uvm_sequencer<REQ>(name)

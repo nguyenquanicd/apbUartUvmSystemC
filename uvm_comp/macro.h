@@ -16,31 +16,31 @@
 #define ApbWriteTX(address, data) \
 {\
 WriteSeq = new cApbWriteSequence<cApbTransaction>("cApbMasterWriteSeq", address, data);\
-WriteSeq->start(p_sequencer->coApbUartAgentTx->coApbUartSequencer, NULL);\
+WriteSeq->start(p_sequencer->coApbMasterAgentTx->coApbMasterSequencer, this);\
 }
 
 #define ApbWriteRandTX(address) \
 {\
 WriteSeq = new cApbWriteSequence<cApbTransaction>("cApbMasterWriteSeq", address);\
 WriteSeq->random();\
-WriteSeq->start(p_sequencer->coApbUartAgentTx->coApbUartSequencer, NULL);\
+WriteSeq->start(p_sequencer->coApbMasterAgentTx->coApbMasterSequencer, this);\
 }
 
 #define ApbReadTX(address, data, umask) \
 {\
 ReadSeq = new cApbReadSequence<cApbTransaction>("cApbMasterReadSeq", address, data, umask);\
-ReadSeq->start(p_sequencer->coApbUartAgentTx->coApbUartSequencer, NULL);\
+ReadSeq->start(p_sequencer->coApbMasterAgentTx->coApbMasterSequencer, this);\
 }
 
 #define ApbWriteRX(address, data) \
 {\
 WriteSeq = new cApbWriteSequence<cApbTransaction>("cApbMasterWriteSeq", address, data);\
-WriteSeq->start(p_sequencer->coApbUartAgentRx->coApbUartSequencer, NULL);\
+WriteSeq->start(p_sequencer->coApbMasterAgentRx->coApbMasterSequencer, this);\
 }
 
 #define ApbReadRX(address, data, umask) \
 {\
 ReadSeq = new cApbReadSequence<cApbTransaction>("cApbMasterReadSeq" , address, data, umask);\
-ReadSeq->start(p_sequencer->coApbUartAgentRx->coApbUartSequencer, NULL);\
+ReadSeq->start(p_sequencer->coApbMasterAgentRx->coApbMasterSequencer, this);\
 }
 #endif /* MACRO_H_ */

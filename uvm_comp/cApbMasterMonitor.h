@@ -28,13 +28,46 @@ class cApbMasterMonitor : public uvm::uvm_monitor
   ifApbMaster *vifApbMaster;
   ifInterrupt *vifInterrupt;
   
+     // transaction
+   cApbTransaction coApbTransaction;
+
+   //Detect interrupt toggle
+   //Internal variables for vifInterrupt
+   sc_uint<5> ifEn;
+   #ifdef INTERRUPT_COM
+   sc_uint<1> ifSta;
+   bool ctrl_if;
+   #else
+   sc_uint<5> ifSta;
+   bool ctrl_tif;
+   bool ctrl_rif;
+   bool ctrl_pif;
+   bool ctrl_oif;  
+   bool ctrl_fif;
+   #endif
+    
+    //Internal variables for vifApbMaster
+    bool preset_n;
+    bool psel;
+    bool penable;
+    bool pready;
+    bool pwrite;
+    sc_uint<32> paddr;
+    sc_uint<32> pwdata;
+    sc_uint<32> prdata;
+    sc_uint<4>  pstrb;
+    
+    // string format
+    char char_string[1024];
+    std::string warning;
+  
   //Constructor
   cApbMasterMonitor(uvm::uvm_component_name name)
   : uvm_monitor(name),
     preset_toScoreboard("preset_toScoreboard"),
     ap_toScoreboard("ap_toScoreboard"),
     vifApbMaster(0),
-    vifInterrupt(0),
+    vifInterrupt(0)
   {}
 
   void build_phase(uvm::uvm_phase& phase)
@@ -55,39 +88,6 @@ class cApbMasterMonitor : public uvm::uvm_monitor
 
   void run_phase( uvm::uvm_phase& phase )
   { 
-    // transaction
-    cApbTransaction coApbTransaction;
-
-    //Detect interrupt toggle
-    //Internal variables for vifInterrupt
-    sc_uint<5> ifEn;
-    #ifdef INTERRUPT_COM
-    sc_uint<1> ifSta;
-    bool ctrl_if;
-    #else
-    sc_uint<5> ifSta;
-    bool ctrl_tif;
-    bool ctrl_rif;
-    bool ctrl_pif;
-    bool ctrl_oif;  
-    bool ctrl_fif;
-    #endif
-    
-    //Internal variables for vifApbMaster
-    bool preset_n;
-    bool psel;
-    bool penable;
-    bool pready;
-    bool pwrite;
-    sc_uint<32> paddr;
-    sc_uint<32> pwdata;
-    sc_uint<32> prdata;
-    sc_uint<4>  pstrb;
-    
-    // string format
-    char char_string[];
-    std::string warning;
-    
     while (true) {
       // detect posedge
       sc_core::wait( vifApbMaster->pclk.default_event() );
@@ -120,9 +120,8 @@ class cApbMasterMonitor : public uvm::uvm_monitor
     pstrb    = vifApbMaster->pstrb.read();
     // get value from vifInterrupt
     #ifdef INTERRUPT_COM
-    ctrl_if = vifInterrupt->ctrl_if.read();
-    #else
     ctrl_if  = vifInterrupt->ctrl_if.read();
+    #else
     ctrl_rif = vifInterrupt->ctrl_rif.read();
     ctrl_pif = vifInterrupt->ctrl_pif.read();
     ctrl_oif = vifInterrupt->ctrl_oif.read();

@@ -13,43 +13,39 @@
 #include <uvm>
 #include "cApbMasterSequencer.h"
 #include "cApbMasterDriver.h"
+#include "cApbMasterMonitor.h"
 #include "cApbTransaction.h"
 
-class cApbUartAgent: public uvm::uvm_agent
+class cApbMasterAgent: public uvm::uvm_agent
 {
     public:
-        cApbUartSequencer<cApbTransaction>* coApbUartSequencer;
-        cApbUartDriver<cApbTransaction>*    coApbUartDriver;
+        cApbMasterSequencer<cApbTransaction>* coApbMasterSequencer;
+        cApbMasterDriver<cApbTransaction>*    coApbMasterDriver;
+        cApbMasterMonitor* coApbMasterMonitor;
         
-        cApbUartAgent(uvm::uvm_component_name name) 
-        : uvm::uvm_agent(name), coApbUartSequencer(0), coApbUartDriver(0) 
+        cApbMasterAgent(uvm::uvm_component_name name) 
+        : uvm::uvm_agent(name), coApbMasterSequencer(0), coApbMasterDriver(0) 
         {
             std::cout << sc_core::sc_time_stamp() << " Construct agent " << name <<"\n" <<std::endl;
         }
         
-        UVM_COMPONENT_UTILS(cApbUartAgent);
+        UVM_COMPONENT_UTILS(cApbMasterAgent);
         
         void build_phase(uvm::uvm_phase& phase)
         {
             uvm::uvm_agent::build_phase(phase);
             std::cout << sc_core::sc_time_stamp() << ":" << this->name() << " abc " << phase.get_name() <<"\n" <<std::endl;
-            if(get_is_active() == uvm::UVM_ACTIVE){
-                UVM_INFO(get_name(), "is set to UVM_ACTIVE", uvm::UVM_NONE);
-                coApbUartSequencer = cApbUartSequencer<cApbTransaction>::type_id::create("coApbUartSequencer", this);
-                assert(coApbUartSequencer);
-                
-                coApbUartDriver = cApbUartDriver<cApbTransaction>::type_id::create("coApbUartDriver", this);
-                assert(coApbUartDriver);
-            } else 
-                UVM_INFO(get_name(), "is set to UVM_PASSIVE", uvm::UVM_NONE);
-            
-           //coApbUartMonitor = cApbUartMonitor::type_id::create("coApbUartMonitor",this);
-           //assert(coApbUartMonitor);
+            coApbMasterSequencer = cApbMasterSequencer<cApbTransaction>::type_id::create("coApbMasterSequencer", this);
+            assert(coApbMasterSequencer);               
+            coApbMasterDriver = cApbMasterDriver<cApbTransaction>::type_id::create("coApbMasterDriver", this);
+            assert(coApbMasterDriver);
+            coApbMasterMonitor = cApbMasterMonitor::type_id::create("coApbMasterMonitor",this);
+            assert(coApbMasterMonitor);
         }
         
         void connect_phase(uvm::uvm_phase& phase){
             std::cout << sc_core::sc_time_stamp() << ": connect_phase " << name() << "\n" << std::endl;
-            coApbUartDriver->seq_item_port.connect(coApbUartSequencer->seq_item_export);
+            coApbMasterDriver->seq_item_port.connect(coApbMasterSequencer->seq_item_export);
        }
         
 };

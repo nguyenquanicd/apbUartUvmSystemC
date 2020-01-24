@@ -12,6 +12,9 @@
 #include <tlm.h>
 #include <uvm>
 
+using namespace uvm;
+using namespace sc_core;
+
 class resetfrmTX_subscriber : public uvm::uvm_subscriber<bool>
 {
  public:
@@ -19,7 +22,7 @@ class resetfrmTX_subscriber : public uvm::uvm_subscriber<bool>
 
   UVM_COMPONENT_UTILS(resetfrmTX_subscriber);
 
-  virtual void write(const bool reset);
+  virtual void write(const bool& reset);
 };
 
 #endif
