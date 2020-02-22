@@ -36,7 +36,7 @@ class cEnv : public uvm::uvm_env
         
         cEnv(uvm::uvm_component_name name) : uvm::uvm_env(name)
         {
-           std::cout << sc_core::sc_time_stamp() << " Construct environemnt " << name <<"\n" <<std::endl; 
+           std::cout << sc_core::sc_time_stamp() << ": [INFO] Construct environemnt " << name <<std::endl; 
         }
 
         //Factory register
@@ -44,7 +44,7 @@ class cEnv : public uvm::uvm_env
         //Function
          void build_phase(uvm::uvm_phase& phase)
          {
-             std::cout << sc_core::sc_time_stamp() << " Build environemnt " << "\n" <<std::endl;
+             std::cout << sc_core::sc_time_stamp() << " Build environemnt " << std::endl;
              uvm::uvm_env::build_phase(phase);
              
              coApbMasterAgentTx = cApbMasterAgent::type_id::create("coApbMasterAgentTx", this);

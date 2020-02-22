@@ -86,7 +86,7 @@ class cScoreboard : public uvm::uvm_scoreboard
   {
 		if (!preset_n) {
 		  rst_flg = 0b1;
-      sprintf(char_string, "[%d] preset_n signal is acting", sc_time());
+      sprintf(char_string, "[%s] preset_n signal is acting", sc_time_stamp().to_string().c_str());
       info = char_string;
       UVM_INFO("SB RESET", info, uvm::UVM_LOW);
 		} else {
@@ -118,11 +118,11 @@ class cScoreboard : public uvm::uvm_scoreboard
         //Compare the read data on UART-TX and transmitted data from UART-RX
         //Only compare 8 LSB bits
 		    if ((TransOnTX.prdata & 0xff) == queueCompRX) {
-          sprintf(char_string, "[%d] SUCCESS on UART-TX: transfer data = %02X, queueTransRX size = %d", sc_time(), TransOnTX.prdata, queueTransRX.size());
+          sprintf(char_string, "[%s] SUCCESS on UART-TX: transfer data = %02X, queueTransRX size = %d", sc_time_stamp().to_string().c_str(), TransOnTX.prdata, queueTransRX.size());
           info = char_string;
 				  UVM_INFO("SB INFO", info, uvm::UVM_LOW);
 				} else {
-          sprintf(char_string, "[%d] FAIL on UART-TX: read data = %02X, expected data =%02X, queueTransRX size = %d", sc_time(), TransOnTX.prdata, queueCompRX, queueTransRX.size());
+          sprintf(char_string, "[%s] FAIL on UART-TX: read data = %02X, expected data =%02X, queueTransRX size = %d", sc_time_stamp().to_string().c_str(), TransOnTX.prdata, queueCompRX, queueTransRX.size());
           error = char_string;
 		      UVM_ERROR("SB ERROR", error);
         }
@@ -167,11 +167,11 @@ class cScoreboard : public uvm::uvm_scoreboard
         //Compare the read data on UART-RX and transmitted data from UART-TX
         //Only compare 8 LSB bits
 		    if ((TransOnRX.prdata & 0xff) == queueCompRX) {
-          sprintf(char_string, "[%d] SUCCESS on UART-RX: transfer data = %02X, queueTransTX size = %d", sc_time(), TransOnRX.prdata, queueTransTX.size());
+          sprintf(char_string, "[%s] SUCCESS on UART-RX: transfer data = %02X, queueTransTX size = %d", sc_time_stamp().to_string().c_str(), TransOnRX.prdata, queueTransTX.size());
           info = char_string;
           UVM_INFO("SB INFO", info, uvm::UVM_LOW);
 				} else {
-          sprintf(char_string, "[%d] FAIL on UART-RX: read data = %02X, expected data =%02X, queueTransTX size = %d", sc_time(), TransOnRX.prdata, queueCompTX, queueTransTX.size());
+          sprintf(char_string, "[%s] FAIL on UART-RX: read data = %02X, expected data =%02X, queueTransTX size = %d", sc_time_stamp().to_string().c_str(), TransOnRX.prdata, queueCompTX, queueTransTX.size());
           error = char_string;
 		      UVM_ERROR("SB ERROR", error);
         }

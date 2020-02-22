@@ -19,9 +19,7 @@ class resetfrmTX_subscriber : public uvm::uvm_subscriber<bool>
 {
  public:
   resetfrmTX_subscriber( uvm::uvm_component_name name );
-
   UVM_COMPONENT_UTILS(resetfrmTX_subscriber);
-
   virtual void write(const bool& reset);
 };
 

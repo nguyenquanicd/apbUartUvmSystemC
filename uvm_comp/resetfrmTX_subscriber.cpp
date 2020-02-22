@@ -11,16 +11,14 @@
 #include "resetfrmTX_subscriber.h"
 #include "cScoreboard.h"
 
-using namespace uvm;
-using namespace sc_core;
-
-resetfrmTX_subscriber::resetfrmTX_subscriber( uvm::uvm_component_name name ) : uvm_subscriber<bool>( name )
+resetfrmTX_subscriber::resetfrmTX_subscriber( uvm_component_name name ) : uvm_subscriber<bool>( name )
 {
+    std::cout << sc_time_stamp() << ": constructor " << name << std::endl;
 }
 
 void resetfrmTX_subscriber::write(const bool& reset)
 {
-  uvm_object* obj;
+  uvm_object* obj;// = get_parrent();
   cScoreboard* coScoreboard;
     
   uvm::uvm_config_db<uvm_object*>::get(this, "", "coScoreboard", obj);

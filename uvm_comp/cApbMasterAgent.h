@@ -26,7 +26,7 @@ class cApbMasterAgent: public uvm::uvm_agent
         cApbMasterAgent(uvm::uvm_component_name name) 
         : uvm::uvm_agent(name), coApbMasterSequencer(0), coApbMasterDriver(0) 
         {
-            std::cout << sc_core::sc_time_stamp() << " Construct agent " << name <<"\n" <<std::endl;
+            std::cout << sc_core::sc_time_stamp() << " [INFO] Construct agent " << name <<"\n" <<std::endl;
         }
         
         UVM_COMPONENT_UTILS(cApbMasterAgent);

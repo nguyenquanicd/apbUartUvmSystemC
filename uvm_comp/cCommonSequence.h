@@ -87,7 +87,9 @@ class cApbWriteSequence : public uvm::uvm_sequence<REQ,RSP>
     addr = address;
   } 
   
-  ~cApbWriteSequence(){}
+  ~cApbWriteSequence(){
+      delete coApbTransaction;
+  }
    
   UVM_OBJECT_PARAM_UTILS(cApbWriteSequence<REQ,RSP>);
   UVM_DECLARE_P_SEQUENCER(cApbMasterSequencer<REQ>);
@@ -122,7 +124,7 @@ class cApbWriteSequence : public uvm::uvm_sequence<REQ,RSP>
       this->start_item(coApbTransaction);
       std::cout << sc_core::sc_time_stamp() << " Finish item" << std::endl;
       std::ostringstream str;
-          str << "Address: '" << addr.to_string().c_str() << "' Data: '"
+          str << sc_time_stamp().to_string().c_str() << " Address: '" << addr.to_string().c_str() << "' Data: '"
               << wdata.to_string().c_str() << "'";
       UVM_INFO("TRANSACTION INFO", str.str(), uvm::UVM_MEDIUM);      
       this->finish_item(coApbTransaction);
@@ -152,8 +154,9 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
     mask = umask;
   } 
   
-  //~cApbReadSequence(){
-  //}
+  ~cApbReadSequence(){
+     delete coApbTransaction;
+  }
    
   UVM_OBJECT_PARAM_UTILS(cApbReadSequence<REQ,RSP>);
   UVM_DECLARE_P_SEQUENCER(cApbMasterSequencer<REQ>);
@@ -163,7 +166,7 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
     //scv_smart_ptr<package> packageSmrPtr("packageSmrPtr");   
     UVM_INFO(this->get_name(), "Starting read sequence ", uvm::UVM_MEDIUM);
      // coApbTransaction = new REQ();
-     cout << "Pointer address  " << coApbTransaction << std::endl;
+     std::cout << "Pointer address  " << coApbTransaction << std::endl;
       //packageSmrPtr->paddr.next();     
       //packageSmrPtr->apbConEn.next();
       
@@ -178,10 +181,11 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
       this->start_item(coApbTransaction);
       std::cout << sc_core::sc_time_stamp() << " Finish item" << std::endl;
       this->finish_item(coApbTransaction);
-      //this->get_response(rsp);
+      this->get_response(coApbTransaction);
+    std::cout << "------------ " << &(coApbTransaction->prdata) << endl;
     compareResult = (coApbTransaction->prdata ^ expData) & mask;   
-    cout << "Pointer address  " << coApbTransaction << std::endl;
-    cout << sc_time_stamp() << " mask " << mask << " compareResult " << compareResult << " Read data " << coApbTransaction->prdata  << std::endl;
+    std::cout << "Pointer address  " << coApbTransaction << std::endl;
+    std::cout << sc_time_stamp() << " mask " << mask << " compareResult " << compareResult << " Read data " << coApbTransaction->prdata  << std::endl;
     if(compareResult){
         std::ostringstream str;
             str << "Address: '" << addr.to_string().c_str() << "' Expected data: '"
@@ -200,5 +204,60 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
   }
 
 };
+
+template <typename REQ = uvm::uvm_sequence_item, typename RSP = REQ>
+class cApbReadWoCmprSequence : public uvm::uvm_sequence<REQ,RSP>
+{
+ public:
+  bool conEn;
+  sc_dt::sc_uint<32> addr;
+  sc_dt::sc_uint<32> exdata;
+  sc_dt::sc_uint<32> mask;
+  REQ* coApbTransaction;
+  //RSP* rsp;
+  cApbReadWoCmprSequence( const std::string& name = "cApbMasterReadSeq", sc_dt::sc_uint<32> address = 0x0, sc_dt::sc_uint<32> data = 0x0, sc_dt::sc_uint<32> umask = 0x0) : uvm::uvm_sequence<REQ,RSP>( name )
+  {
+    std::cout << sc_core::sc_time_stamp() << ": constructor " << name << std::endl;
+    coApbTransaction = REQ::type_id::create("coApbTransaction");
+    addr = address;
+    exdata = data;
+    mask = umask;
+  } 
+  
+  ~cApbReadWoCmprSequence(){
+    delete coApbTransaction;
+  }
+   
+  UVM_OBJECT_PARAM_UTILS(cApbReadWoCmprSequence<REQ,RSP>);
+  UVM_DECLARE_P_SEQUENCER(cApbMasterSequencer<REQ>);
+  void body()
+  {    
+    package_constraint constraint("constraint");    
+    //scv_smart_ptr<package> packageSmrPtr("packageSmrPtr");   
+    UVM_INFO(this->get_name(), "Starting read sequence without compare", uvm::UVM_MEDIUM);
+      conEn = constraint.packageSmrPtr->apbConEn;
+      
+      coApbTransaction->pwrite   = 0;
+      coApbTransaction->apbSeqEn = 1;
+      coApbTransaction->paddr    = addr;      
+      coApbTransaction->apbConEn = conEn;
+      std::cout << sc_core::sc_time_stamp() << " Start item " << std::endl;
+      this->start_item(coApbTransaction);
+      std::cout << sc_core::sc_time_stamp() << " Finish item" << std::endl;
+      this->finish_item(coApbTransaction);
+      this->get_response(coApbTransaction);
+    bool compareResult = (coApbTransaction->prdata ^ exdata) & mask;           
+    if(compareResult == 0){
+        std::ostringstream str;
+            str << "Address: '" << addr.to_string().c_str() << "' Expected data: '"
+                << exdata.to_string().c_str() << "'Actual data: '" << coApbTransaction->prdata.to_string().c_str()
+                << "' Mask: '" << mask.to_string().c_str() << "'";
+        UVM_INFO("TRANSACTION INFO", str.str(), uvm::UVM_MEDIUM);
+        
+    }
+    UVM_INFO(this->get_name(), "Finishing sequence ", uvm::UVM_MEDIUM);
+  }
+};
+
 
 #endif /* COMMONSEQUENCE_H_ */

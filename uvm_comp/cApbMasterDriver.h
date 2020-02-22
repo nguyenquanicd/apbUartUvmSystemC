@@ -59,9 +59,7 @@ class cApbMasterDriver : public uvm::uvm_driver<REQ>
             while(true){
                 this->seq_item_port->get_next_item(req);
                 convert_seq2apb(req);
-                this->seq_item_port->item_done();
-               std::cout << sc_time_stamp() << "DECMN BUG4  " << req.prdata << std::endl;
-               std::cout << sc_time_stamp() << "DECMN BUG4  " << &req << std::endl;
+                this->seq_item_port->item_done(req);
             }
         }
         
@@ -75,14 +73,13 @@ class cApbMasterDriver : public uvm::uvm_driver<REQ>
          
                 uart_vifApbMaster->psel.write(1);
                 uart_vifApbMaster->paddr.write(user_req.paddr);
+                std::cout << sc_time_stamp() <<" DECMN BUG2 " << user_req.paddr << std::endl;
                 uart_vifApbMaster->pwrite.write(user_req.pwrite);
                 uart_vifApbMaster->pstrb.write(user_req.pstrb); 
                 if(user_req.pwrite){
                     uart_vifApbMaster->pwdata.write(user_req.pwdata);
                 } else {
                     user_req.prdata = uart_vifApbMaster->prdata.read();
-                    std::cout << sc_time_stamp() <<" DECMN BUG2 " << user_req.prdata << std::endl;
-                    std::cout << sc_time_stamp() <<" DECMN BUG2 " << user_req << std::endl;
                     wait(1,SC_NS);
                 }
                 
@@ -98,9 +95,7 @@ class cApbMasterDriver : public uvm::uvm_driver<REQ>
                 uart_vifApbMaster->psel = 0;
                 uart_vifApbMaster->penable = 0;
             }
-//            sc_core::wait(1, sc_core::SC_NS);
-            std::cout << sc_time_stamp() << "DECMN BUG3  " << uart_vifApbMaster->prdata.read() << std::endl;
-            
+//            sc_core::wait(1, sc_core::SC_NS);         
         }
         
 };   

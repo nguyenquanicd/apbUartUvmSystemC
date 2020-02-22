@@ -18,7 +18,7 @@ class cApbMasterSequencer: public uvm::uvm_sequencer<REQ>
     public:
         cApbMasterSequencer(uvm::uvm_component_name name) : uvm::uvm_sequencer<REQ>(name)
         {
-            std::cout << sc_core::sc_time_stamp() << ": constructor " << name << std::endl;
+            std::cout << sc_core::sc_time_stamp() << "[INFO]: construct Sequencer " << name << std::endl;
         }
         UVM_COMPONENT_PARAM_UTILS(cApbMasterSequencer<REQ>);
 };

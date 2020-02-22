@@ -39,8 +39,8 @@ SC_MODULE(mPeripheral)
     
     SC_CTOR(mPeripheral): uart0_clk("uart0_clk"), uart1_clk("uart1_clk"),
                           uart0_pResetN("uart0_pResetN"), uart1_pResetN("uart1_pResetN"),
-                          uart0_clock("uart0_clock", UART0_CLOCK_CYCLE/2,SC_NS, 0.5),
-                          uart1_clock("uart1_clock", UART1_CLOCK_CYCLE/2,SC_NS, 0.5)
+                          uart0_clock("uart0_clock", UART0_CLOCK_CYCLE,SC_NS, 0.5),
+                          uart1_clock("uart1_clock", UART1_CLOCK_CYCLE,SC_NS, 0.5)
     {
         SC_METHOD(uart0ClockSupply)
             sensitive << uart0_clock;            

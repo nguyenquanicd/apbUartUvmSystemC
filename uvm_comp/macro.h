@@ -34,7 +34,12 @@ ReadSeq->start(p_sequencer->coApbMasterAgentTx->coApbMasterSequencer, this);\
 
 #define ApbWriteRX(address, data) \
 {\
-WriteSeq = new cApbWriteSequence<cApbTransaction>("cApbMasterWriteSeq", address, data);\
+if(WriteSeq){\
+    WriteSeq->wdata = data;\
+    WriteSeq->addr = address;\
+} else {\
+    WriteSeq = new cApbWriteSequence<cApbTransaction>("cApbMasterWriteSeq", address, data);\
+}\
 WriteSeq->start(p_sequencer->coApbMasterAgentRx->coApbMasterSequencer, this);\
 }
 
@@ -42,5 +47,18 @@ WriteSeq->start(p_sequencer->coApbMasterAgentRx->coApbMasterSequencer, this);\
 {\
 ReadSeq = new cApbReadSequence<cApbTransaction>("cApbMasterReadSeq" , address, data, umask);\
 ReadSeq->start(p_sequencer->coApbMasterAgentRx->coApbMasterSequencer, this);\
+}
+
+#define ApbReadWoCmprRX(address, expData, umask) \
+{\
+if(ReadWoComprSeq) {\
+  ReadWoComprSeq->addr = address;\
+  ReadWoComprSeq->exdata = expData;\
+  ReadWoComprSeq->mask = umask;\
+} else {\
+ ReadWoComprSeq = new cApbReadWoCmprSequence<cApbTransaction>\
+           ("cApbReadWoCmprSequence", address, expData, umask);\
+}\
+ReadWoComprSeq->start(p_sequencer->coApbMasterAgentRx->coApbMasterSequencer, this);\
 }
 #endif /* MACRO_H_ */

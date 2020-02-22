@@ -82,7 +82,7 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.pReady,"pRead
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.pSlvErr,"pSlvErrif_Tx");
 
 //Transmitter
-//sc_trace(uart_waveform, dut_top->InstApbUartTransmitter.uartTx,"InstApbUartTransmitter.uartTx_Tx");
+sc_trace(uart_waveform, dut_top->InstApbUartTop_0.uartTx,"InstApbUartTransmitter.uartTx_Tx");
 //sc_trace(uart_waveform, dut_top->InstApbUartTransmitter.txShiftReg,"InstApbUartTransmitter.txShiftReg_Tx");
 //sc_trace(uart_waveform, dut_top->InstApbUartTransmitter.loadData,"InstApbUartTransmitter.loadData_Tx");
 //sc_trace(uart_waveform, dut_top->InstApbUartTransmitter.shiftEn,"InstApbUartTransmitter.shiftEn_Tx");
@@ -138,6 +138,7 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_1.rxRxf,"rxRxf_Rx");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.txBusy,"txBusy_Rx");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.txNf,"txNf_Rx");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.txTxe,"txTxe_Rx");
+sc_trace(uart_waveform, dut_top->InstApbUartTop_1.uartRx,"InstApbUartTransmitter.uartRx_Rx");
 //sc_trace(uart_waveform, dut_top->InstApbUartApbIf.errCondition,"errCondition_Rx");
     // Interrupt    
 #ifdef INTERRUPT_COM
