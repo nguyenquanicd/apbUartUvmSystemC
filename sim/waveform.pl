@@ -48,6 +48,7 @@ my $routing_path ;
 my $start_flag ;
 my $signal ;
 my @signal_split ;
+my $signal_prefix ;
 
 my $pj_introduce = "//--------------------------------------\
 //Project:  Simple CPU\
@@ -151,6 +152,9 @@ open (DEF_FILE, "< waveform.def") ;
                 $routing_path .= "$instance_hash{$hierarchy_split[$i]}{name}." ;
             }
             
+            $signal_prefix = "$routing_path" ;
+            $signal_prefix =~ s/->/./g ;
+            
             #list all signal
             open (MODEL_FILE, "< $instance_hash{$hierarchy_split[$i]}{file}") ;
             $start_flag = 0 ;
@@ -173,10 +177,12 @@ open (DEF_FILE, "< waveform.def") ;
                       print TEMP_FILE ("for (int i=0; i<$signal_split[1]; i++) {\n") ;
                       print TEMP_FILE ("  char str[4];\n") ;
                       print TEMP_FILE ("  sprintf(str, \"(%0d)\",i);\n") ;
-                      print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_split[0]_$instance_hash{$hierarchy_split[$i]}{name}_\" + string(str));\n") ;
+                      #print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_split[0]_$instance_hash{$hierarchy_split[$i]}{name}_\" + string(str));\n") ;
+                      print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_prefix$signal_split[0]_\" + string(str));\n") ;
                       print TEMP_FILE ("}\n") ;
                     } else {
-                        print TEMP_FILE ("sc_trace($waveform_file, $routing_path$signal, \"$signal\_$instance_hash{$hierarchy_split[$i]}{name}\");\n") ;
+                        #print TEMP_FILE ("sc_trace($waveform_file, $routing_path$signal, \"$signal\_$instance_hash{$hierarchy_split[$i]}{name}\");\n") ;
+                        print TEMP_FILE ("sc_trace($waveform_file, $routing_path$signal, \"$signal_prefix$signal\");\n") ;
                     }
                 } elsif ("$model_line" =~ /#ifdef|#ifndef|#else|#endif/) {
                     chomp $model_line ;
@@ -204,6 +210,9 @@ open (DEF_FILE, "< waveform.def") ;
                 $routing_path .= "$instance_hash{$hierarchy_split[$i]}{name}." ;
             }
             
+            $signal_prefix = "$routing_path" ;
+            $signal_prefix =~ s/->/./g ;
+            
             #list all signal
             open (MODEL_FILE, "< $instance_hash{$hierarchy_split[$i]}{file}") ;
             $start_flag = 0 ;
@@ -226,10 +235,12 @@ open (DEF_FILE, "< waveform.def") ;
                       print TEMP_FILE ("for (int i=0; i<$signal_split[1]; i++) {\n") ;
                       print TEMP_FILE ("  char str[4];\n") ;
                       print TEMP_FILE ("  sprintf(str, \"(%0d)\",i);\n") ;
-                      print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_split[0]_$instance_hash{$hierarchy_split[$i]}{name}_\" + string(str));\n") ;
+                      #print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_split[0]_$instance_hash{$hierarchy_split[$i]}{name}_\" + string(str));\n") ;
+                      print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_prefix$signal_split[0]_\" + string(str));\n") ;
                       print TEMP_FILE ("}\n") ;
                     } else {
-                        print TEMP_FILE ("sc_trace($waveform_file, $routing_path$signal, \"$signal\_$instance_hash{$hierarchy_split[$i]}{name}\");\n") ;
+                        #print TEMP_FILE ("sc_trace($waveform_file, $routing_path$signal, \"$signal\_$instance_hash{$hierarchy_split[$i]}{name}\");\n") ;
+                        print TEMP_FILE ("sc_trace($waveform_file, $routing_path$signal, \"$signal_prefix$signal\");\n") ;
                     }
                 } elsif ("$model_line" =~ /#ifdef|#ifndef|#else|#endif/) {
                     chomp $model_line ;
