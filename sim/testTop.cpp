@@ -101,7 +101,7 @@ int sc_main(int, char*[])
     //sc_core::sc_start(10, SC_NS);
     //peripheral->uart1_pResetN.write(1);
     //peripheral->uart0_pResetN.write(1);  
-    #include "uart_trace.h"    
+    #include "uart_trace_auto.h"    
     uvm::run_test();
 
     

@@ -178,7 +178,7 @@ open (DEF_FILE, "< waveform.def") ;
                       print TEMP_FILE ("  char str[4];\n") ;
                       print TEMP_FILE ("  sprintf(str, \"(%0d)\",i);\n") ;
                       #print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_split[0]_$instance_hash{$hierarchy_split[$i]}{name}_\" + string(str));\n") ;
-                      print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_prefix$signal_split[0]_\" + string(str));\n") ;
+                      print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_prefix$signal_split[0]\" + string(str));\n") ;
                       print TEMP_FILE ("}\n") ;
                     } else {
                         #print TEMP_FILE ("sc_trace($waveform_file, $routing_path$signal, \"$signal\_$instance_hash{$hierarchy_split[$i]}{name}\");\n") ;
@@ -186,7 +186,7 @@ open (DEF_FILE, "< waveform.def") ;
                     }
                 } elsif ("$model_line" =~ /#ifdef|#ifndef|#else|#endif/) {
                     chomp $model_line ;
-                    $model_line =~ s/\s*//g ;
+                    $model_line =~ s/^\s+//g ;
                     print TEMP_FILE ("$model_line\n") ;
                 }
               } elsif ("$model_line" =~ /SC_MODULE/) {
@@ -236,7 +236,7 @@ open (DEF_FILE, "< waveform.def") ;
                       print TEMP_FILE ("  char str[4];\n") ;
                       print TEMP_FILE ("  sprintf(str, \"(%0d)\",i);\n") ;
                       #print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_split[0]_$instance_hash{$hierarchy_split[$i]}{name}_\" + string(str));\n") ;
-                      print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_prefix$signal_split[0]_\" + string(str));\n") ;
+                      print TEMP_FILE ("  sc_trace($waveform_file, $routing_path$signal_split[0]\[i], \"$signal_prefix$signal_split[0]\" + string(str));\n") ;
                       print TEMP_FILE ("}\n") ;
                     } else {
                         #print TEMP_FILE ("sc_trace($waveform_file, $routing_path$signal, \"$signal\_$instance_hash{$hierarchy_split[$i]}{name}\");\n") ;
@@ -244,7 +244,7 @@ open (DEF_FILE, "< waveform.def") ;
                     }
                 } elsif ("$model_line" =~ /#ifdef|#ifndef|#else|#endif/) {
                     chomp $model_line ;
-                    $model_line =~ s/\s*//g ;
+                    $model_line =~ s/^\s+//g ;
                     print TEMP_FILE ("$model_line\n") ;
                 }
               } elsif ("$model_line" =~ /SC_MODULE/) {

@@ -23,10 +23,10 @@ sc_trace(uart_waveform, dut_top->pstrb_0, "dut_top.pstrb_0");
 sc_trace(uart_waveform, dut_top->prdata_0, "dut_top.prdata_0");
 sc_trace(uart_waveform, dut_top->pready_0, "dut_top.pready_0");
 sc_trace(uart_waveform, dut_top->pslverr_0, "dut_top.pslverr_0");
-#ifdefINTERRUPT_COM
+#ifdef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->ctrl_if_0, "dut_top.ctrl_if_0");
 #endif
-#ifndefINTERRUPT_COM
+#ifndef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->ctrl_fif_0, "dut_top.ctrl_fif_0");
 sc_trace(uart_waveform, dut_top->ctrl_oif_0, "dut_top.ctrl_oif_0");
 sc_trace(uart_waveform, dut_top->ctrl_pif_0, "dut_top.ctrl_pif_0");
@@ -44,7 +44,7 @@ sc_trace(uart_waveform, dut_top->pstrb_1, "dut_top.pstrb_1");
 sc_trace(uart_waveform, dut_top->prdata_1, "dut_top.prdata_1");
 sc_trace(uart_waveform, dut_top->pready_1, "dut_top.pready_1");
 sc_trace(uart_waveform, dut_top->pslverr_1, "dut_top.pslverr_1");
-#ifdefINTERRUPT_COM
+#ifdef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->ctrl_if_1, "dut_top.ctrl_if_1");
 #else
 sc_trace(uart_waveform, dut_top->ctrl_fif_1, "dut_top.ctrl_fif_1");
@@ -70,10 +70,10 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_0.pReady, "dut_top.InstApbUartTo
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.pSlvErr, "dut_top.InstApbUartTop_0.pSlvErr");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.uartRx, "dut_top.InstApbUartTop_0.uartRx");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.uartTx, "dut_top.InstApbUartTop_0.uartTx");
-#ifdefINTERRUPT_COM
+#ifdef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.ctrlIf, "dut_top.InstApbUartTop_0.ctrlIf");
 #endif
-#ifndefINTERRUPT_COM
+#ifndef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.ctrlTIf, "dut_top.InstApbUartTop_0.ctrlTIf");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.ctrlRIf, "dut_top.InstApbUartTop_0.ctrlRIf");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.ctrlOIf, "dut_top.InstApbUartTop_0.ctrlOIf");
@@ -139,10 +139,10 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.ctrlData, "du
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.pRData, "dut_top.InstApbUartTop_0.InstApbUartApbIf.pRData");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.pReady, "dut_top.InstApbUartTop_0.InstApbUartApbIf.pReady");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.pSlvErr, "dut_top.InstApbUartTop_0.InstApbUartApbIf.pSlvErr");
-#ifdefINTERRUPT_COM
+#ifdef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.ctrlIf, "dut_top.InstApbUartTop_0.InstApbUartApbIf.ctrlIf");
 #endif
-#ifndefINTERRUPT_COM
+#ifndef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.ctrlTIf, "dut_top.InstApbUartTop_0.InstApbUartApbIf.ctrlTIf");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.ctrlRIf, "dut_top.InstApbUartTop_0.InstApbUartApbIf.ctrlRIf");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartApbIf.ctrlOIf, "dut_top.InstApbUartTop_0.InstApbUartApbIf.ctrlOIf");
@@ -220,7 +220,7 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartReciever.dataInRxFi
 for (int i=0; i<16; i++) {
   char str[4];
   sprintf(str, "(%0d)",i);
-  sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartReciever.rxMemArray[i], "dut_top.InstApbUartTop_0.InstApbUartReciever.rxMemArray_" + string(str));
+  sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartReciever.rxMemArray[i], "dut_top.InstApbUartTop_0.InstApbUartReciever.rxMemArray" + string(str));
 }
 
 //InstApbUartTransmitter --- list of ports & signals
@@ -251,7 +251,7 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartTransmitter.txWptr,
 for (int i=0; i<16; i++) {
   char str[4];
   sprintf(str, "(%0d)",i);
-  sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartTransmitter.txMemArray[i], "dut_top.InstApbUartTop_0.InstApbUartTransmitter.txMemArray_" + string(str));
+  sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartTransmitter.txMemArray[i], "dut_top.InstApbUartTop_0.InstApbUartTransmitter.txMemArray" + string(str));
 }
 sc_trace(uart_waveform, dut_top->InstApbUartTop_0.InstApbUartTransmitter.txShiftReg, "dut_top.InstApbUartTop_0.InstApbUartTransmitter.txShiftReg");
 
@@ -269,10 +269,10 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_1.pReady, "dut_top.InstApbUartTo
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.pSlvErr, "dut_top.InstApbUartTop_1.pSlvErr");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.uartRx, "dut_top.InstApbUartTop_1.uartRx");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.uartTx, "dut_top.InstApbUartTop_1.uartTx");
-#ifdefINTERRUPT_COM
+#ifdef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.ctrlIf, "dut_top.InstApbUartTop_1.ctrlIf");
 #endif
-#ifndefINTERRUPT_COM
+#ifndef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.ctrlTIf, "dut_top.InstApbUartTop_1.ctrlTIf");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.ctrlRIf, "dut_top.InstApbUartTop_1.ctrlRIf");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.ctrlOIf, "dut_top.InstApbUartTop_1.ctrlOIf");
@@ -338,10 +338,10 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartApbIf.ctrlData, "du
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartApbIf.pRData, "dut_top.InstApbUartTop_1.InstApbUartApbIf.pRData");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartApbIf.pReady, "dut_top.InstApbUartTop_1.InstApbUartApbIf.pReady");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartApbIf.pSlvErr, "dut_top.InstApbUartTop_1.InstApbUartApbIf.pSlvErr");
-#ifdefINTERRUPT_COM
+#ifdef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartApbIf.ctrlIf, "dut_top.InstApbUartTop_1.InstApbUartApbIf.ctrlIf");
 #endif
-#ifndefINTERRUPT_COM
+#ifndef INTERRUPT_COM
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartApbIf.ctrlTIf, "dut_top.InstApbUartTop_1.InstApbUartApbIf.ctrlTIf");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartApbIf.ctrlRIf, "dut_top.InstApbUartTop_1.InstApbUartApbIf.ctrlRIf");
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartApbIf.ctrlOIf, "dut_top.InstApbUartTop_1.InstApbUartApbIf.ctrlOIf");
@@ -419,7 +419,7 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartReciever.dataInRxFi
 for (int i=0; i<16; i++) {
   char str[4];
   sprintf(str, "(%0d)",i);
-  sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartReciever.rxMemArray[i], "dut_top.InstApbUartTop_1.InstApbUartReciever.rxMemArray_" + string(str));
+  sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartReciever.rxMemArray[i], "dut_top.InstApbUartTop_1.InstApbUartReciever.rxMemArray" + string(str));
 }
 
 //InstApbUartTransmitter --- list of ports & signals
@@ -450,7 +450,7 @@ sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartTransmitter.txWptr,
 for (int i=0; i<16; i++) {
   char str[4];
   sprintf(str, "(%0d)",i);
-  sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartTransmitter.txMemArray[i], "dut_top.InstApbUartTop_1.InstApbUartTransmitter.txMemArray_" + string(str));
+  sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartTransmitter.txMemArray[i], "dut_top.InstApbUartTop_1.InstApbUartTransmitter.txMemArray" + string(str));
 }
 sc_trace(uart_waveform, dut_top->InstApbUartTop_1.InstApbUartTransmitter.txShiftReg, "dut_top.InstApbUartTop_1.InstApbUartTransmitter.txShiftReg");
 
