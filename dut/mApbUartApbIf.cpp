@@ -174,20 +174,20 @@ void mApbUartApbIf::pcSequence() {
                     | ctrlFIf.read());
     #endif
     //Receiver shift counter
-    if (~ctrlEnTmp_) {
+    if (!ctrlEnTmp_) {
       rxCounter.write(0);
     }
-    else if (ctrlEnTmp_ & ctrlShiftRx_) {
+    else if ((ctrlEnTmp_ & ctrlShiftRx_)) {
       rxCounter.write(0);
     }
-    else if (ctrlEnTmp_ & (ctrlShiftRx_ == 0)) {
+    else if ((ctrlEnTmp_ & !ctrlShiftRx_)) {
       rxCounter.write(rxCounter.read() + 1);
     }
     //Transmit shift counter
-    if (~ctrlEnTmp_) {
+    if (!ctrlEnTmp_) {
       txCounter.write(0);
     }
-    else if (ctrlEnTmp_ & ctrlShiftRx_) {
+    else if ((ctrlEnTmp_ & ctrlShiftRx_)) {
       txCounter.write(txCounter.read() + 1);
     }
     //Pslv error signal

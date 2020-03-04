@@ -7,6 +7,8 @@
 //--------------------------------------
 
 #include "mApbUartTransmitter.h"
+#include <iostream>
+using namespace std;
 
 // pcRegisters
 void mApbUartTransmitter::pcRegisters() {
@@ -134,7 +136,8 @@ void mApbUartTransmitter::pmSignals() {
 
   // complex assign
   bool data9_w           = (ctrlD9_r == 1) ? txParity : 0b1;
-  bool loadData_w        = ctrlShiftTx_r & !txFifoEmpty & fsmShift;  
+  bool loadData_w        = ctrlShiftTx_r & !txFifoEmpty & fsmIdle;
+    
   bool txShiftComplete_w = (ctrlD9_r == 1) ? (shiftTxCounter_r == 0xA) : (shiftTxCounter_r == 0x9);
   bool txTxe_w;
   switch (ctrlTxt_r) {
