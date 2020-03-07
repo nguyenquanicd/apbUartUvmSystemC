@@ -22,14 +22,13 @@ class cApbMasterAgent: public uvm::uvm_agent
         cApbMasterSequencer<cApbTransaction>* coApbMasterSequencer;
         cApbMasterDriver<cApbTransaction>*    coApbMasterDriver;
         cApbMasterMonitor* coApbMasterMonitor;
-        
+        UVM_COMPONENT_UTILS(cApbMasterAgent);
+         
         cApbMasterAgent(uvm::uvm_component_name name) 
         : uvm::uvm_agent(name), coApbMasterSequencer(0), coApbMasterDriver(0) 
         {
             std::cout << sc_core::sc_time_stamp() << " [INFO] Construct agent " << name <<"\n" <<std::endl;
         }
-        
-        UVM_COMPONENT_UTILS(cApbMasterAgent);
         
         void build_phase(uvm::uvm_phase& phase)
         {

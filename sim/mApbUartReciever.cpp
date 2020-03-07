@@ -33,7 +33,7 @@ void mApbUartReciever::pcProcess(){
 		bool wrRxFifo_			= wrRxFifo.read();
 		bool RxFifoFull_		= rxFifoFull.read();
 		bool RdRxFifo_			= rdRxFifo.read();
-		bool RxShiftReg_		= rxShiftReg.read();
+		sc_uint<10 > RxShiftReg_		= rxShiftReg.read();
 		bool RxFifoRe_			= rxFifoRe.read();
 		bool CtrlEn_			= ctrlEn.read();
 		bool RxShiftEn_			= rxShiftEn.read();
@@ -106,8 +106,10 @@ void mApbUartReciever::pcProcess(){
 
         //Shift register: Sample a bit at the sampled point and store in this register
         //Right shift because the LSB is transfered first
-		RxShiftReg_ = (RxShiftReg_ >> 1) | (UartSync_ << 9);
-		FfSync_ = FfSync_ << 1 | UartRx_; // Input synchronizer - 2FF
+        if(RxShiftEn_) {
+            RxShiftReg_ = (RxShiftReg_ >> 1) | (UartSync_ << 9);           
+        }
+        FfSync_ = FfSync_ << 1 | UartRx_; // Input synchronizer - 2FF
 
 		// Write pointer RxWptr
 		if (CtrlEn_ == 0) {
@@ -122,7 +124,7 @@ void mApbUartReciever::pcProcess(){
         //Memory array of RXFIFO
 		if (RxFifoWe_ == 1) {
 			//RxMemArray_[RxWptr_] = DataInRxFifo_;
-			rxMemArray[RxWptr_].write(DataInRxFifo_);
+			rxMemArray[rxRptr.read()].write(DataInRxFifo_);
 		}
 
 		// current state register

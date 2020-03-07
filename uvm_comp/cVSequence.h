@@ -39,7 +39,6 @@ class cApbUartVirSequence: public uvm::uvm_sequence<>
         //    // raise objection if started as a root sequence
         //    if(this->starting_phase != NULL)
         //    this->starting_phase->raise_objection(this);
-        //    std::cout << sc_core::sc_time_stamp() << " Cais DKM --------------- pre_body " << std::endl;
         //}
         
         void body(){          
@@ -61,18 +60,18 @@ class cApbUartVirSequence: public uvm::uvm_sequence<>
             ApbWriteTX(0x0C,0xAB);
             ApbReadRX(0x04,0xA3,0xFF);
             while(1){
-                ApbReadWoCmprRX(0x04, 0xAB, 0xFF);
+                ApbReadWoCmprRX(0x04, 0xFF);
                 if(ReadWoComprSeq->coApbTransaction->prdata[6]){
-                    ApbReadRX(0xC,0xAB,0xFF);
-                    wait(100,SC_NS);
                     UVM_INFO(this->get_name(), "Sequence finished here", uvm::UVM_NONE);
-                    sc_core::sc_stop();
+                    break;                    
                 }
-            }                    
+            }
+            ApbReadRX(0xC,0xAB,0xFF);  
+            wait(100,SC_NS);            
+            sc_core::sc_stop();            
         }        
         //void post_body()
         //{
-        //    std::cout << sc_core::sc_time_stamp() << " Cais DKM --------------- post_body " << std::endl;
         //    // drop objection if started as a root sequence
         //    if(this->starting_phase != NULL){
         //         std::cout << sc_core::sc_time_stamp() << " Cais starting_phase != " << std::endl;

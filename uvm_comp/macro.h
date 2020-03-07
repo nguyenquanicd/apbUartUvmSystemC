@@ -15,20 +15,35 @@
 
 #define ApbWriteTX(address, data) \
 {\
+if(WriteSeq){ \
+   WriteSeq->wdata = data;\
+   WriteSeq->addr = address;\
+} else { \
 WriteSeq = new cApbWriteSequence<cApbTransaction>("cApbMasterWriteSeq", address, data);\
+} \
 WriteSeq->start(p_sequencer->coApbMasterAgentTx->coApbMasterSequencer, this);\
 }
 
 #define ApbWriteRandTX(address) \
 {\
+if(WriteSeq) {\
+    writeSeq->addr = address;\
+    WriteSeq->random();\
+} else {\
 WriteSeq = new cApbWriteSequence<cApbTransaction>("cApbMasterWriteSeq", address);\
-WriteSeq->random();\
+}\
 WriteSeq->start(p_sequencer->coApbMasterAgentTx->coApbMasterSequencer, this);\
 }
 
 #define ApbReadTX(address, data, umask) \
 {\
+if(ReadSeq){\
+   ReadSeq->addr  = address;\
+   ReadSeq->expData = data;\
+   ReadSeq->mask = umask;\
+} else {\
 ReadSeq = new cApbReadSequence<cApbTransaction>("cApbMasterReadSeq", address, data, umask);\
+}\
 ReadSeq->start(p_sequencer->coApbMasterAgentTx->coApbMasterSequencer, this);\
 }
 
@@ -45,19 +60,24 @@ WriteSeq->start(p_sequencer->coApbMasterAgentRx->coApbMasterSequencer, this);\
 
 #define ApbReadRX(address, data, umask) \
 {\
+if(ReadSeq){\
+   ReadSeq->addr  = address;\
+   ReadSeq->expData = data;\
+   ReadSeq->mask = umask;\
+} else {\
 ReadSeq = new cApbReadSequence<cApbTransaction>("cApbMasterReadSeq" , address, data, umask);\
+}\
 ReadSeq->start(p_sequencer->coApbMasterAgentRx->coApbMasterSequencer, this);\
 }
 
-#define ApbReadWoCmprRX(address, expData, umask) \
+#define ApbReadWoCmprRX(address, umask) \
 {\
 if(ReadWoComprSeq) {\
   ReadWoComprSeq->addr = address;\
-  ReadWoComprSeq->exdata = expData;\
   ReadWoComprSeq->mask = umask;\
 } else {\
  ReadWoComprSeq = new cApbReadWoCmprSequence<cApbTransaction>\
-           ("cApbReadWoCmprSequence", address, expData, umask);\
+           ("cApbReadWoCmprSequence", address, umask);\
 }\
 ReadWoComprSeq->start(p_sequencer->coApbMasterAgentRx->coApbMasterSequencer, this);\
 }

@@ -16,11 +16,13 @@ template <class REQ>
 class cApbMasterSequencer: public uvm::uvm_sequencer<REQ>
 {
     public:
+        UVM_COMPONENT_PARAM_UTILS(cApbMasterSequencer<REQ>);
+        
         cApbMasterSequencer(uvm::uvm_component_name name) : uvm::uvm_sequencer<REQ>(name)
         {
             std::cout << sc_core::sc_time_stamp() << "[INFO]: construct Sequencer " << name << std::endl;
         }
-        UVM_COMPONENT_PARAM_UTILS(cApbMasterSequencer<REQ>);
+
 };
 
 #endif /*  CAPBUARTSEQUENCER_H_ */

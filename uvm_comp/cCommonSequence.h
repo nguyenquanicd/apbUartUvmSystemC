@@ -35,18 +35,12 @@ struct package{
         scv_extensions<sc_dt::sc_uint<32> > paddr;
         scv_extensions<sc_dt::sc_uint<32> > pwdata;
         scv_extensions<sc_dt::sc_uint<4> > pstrb;
-        //scv_extensions<bool> apbSeqEn;
-        //scv_extensions<bool> apbConEn;
-        //scv_extensions<unsigned int> apbDelay;
         SCV_EXTENSIONS_CTOR(package)
         {
             SCV_FIELD(apbConEn);
             SCV_FIELD(paddr);
             SCV_FIELD(pwdata);
             SCV_FIELD(pstrb);
-            //SCV_FIELD(apbSeqEn);
-            //SCV_FIELD(apbConEn);
-            //SCV_FIELD(apbDelay);
         }
 };
 
@@ -130,7 +124,6 @@ class cApbWriteSequence : public uvm::uvm_sequence<REQ,RSP>
       this->finish_item(coApbTransaction);
     UVM_INFO(this->get_name(), "Finishing sequence ", uvm::UVM_MEDIUM);
   }
-
 };
 
 
@@ -166,7 +159,6 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
     //scv_smart_ptr<package> packageSmrPtr("packageSmrPtr");   
     UVM_INFO(this->get_name(), "Starting read sequence ", uvm::UVM_MEDIUM);
      // coApbTransaction = new REQ();
-     std::cout << "Pointer address  " << coApbTransaction << std::endl;
       //packageSmrPtr->paddr.next();     
       //packageSmrPtr->apbConEn.next();
       
@@ -182,10 +174,9 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
       std::cout << sc_core::sc_time_stamp() << " Finish item" << std::endl;
       this->finish_item(coApbTransaction);
       this->get_response(coApbTransaction);
-    std::cout << "------------ " << &(coApbTransaction->prdata) << endl;
     compareResult = (coApbTransaction->prdata ^ expData) & mask;   
     std::cout << "Pointer address  " << coApbTransaction << std::endl;
-    std::cout << sc_time_stamp() << " mask " << mask << " compareResult " << compareResult << " Read data " << coApbTransaction->prdata  << std::endl;
+    std::cout << sc_time_stamp() << " mask " << mask << " compareResult " << compareResult << " Read data " << coApbTransaction->prdata << std::endl;
     if(compareResult){
         std::ostringstream str;
             str << "Address: '" << addr.to_string().c_str() << "' Expected data: '"
@@ -215,12 +206,11 @@ class cApbReadWoCmprSequence : public uvm::uvm_sequence<REQ,RSP>
   sc_dt::sc_uint<32> mask;
   REQ* coApbTransaction;
   //RSP* rsp;
-  cApbReadWoCmprSequence( const std::string& name = "cApbMasterReadSeq", sc_dt::sc_uint<32> address = 0x0, sc_dt::sc_uint<32> data = 0x0, sc_dt::sc_uint<32> umask = 0x0) : uvm::uvm_sequence<REQ,RSP>( name )
+  cApbReadWoCmprSequence( const std::string& name = "cApbMasterReadSeq", sc_dt::sc_uint<32> address = 0x0, sc_dt::sc_uint<32> umask = 0x0) : uvm::uvm_sequence<REQ,RSP>( name )
   {
     std::cout << sc_core::sc_time_stamp() << ": constructor " << name << std::endl;
     coApbTransaction = REQ::type_id::create("coApbTransaction");
     addr = address;
-    exdata = data;
     mask = umask;
   } 
   
@@ -246,15 +236,13 @@ class cApbReadWoCmprSequence : public uvm::uvm_sequence<REQ,RSP>
       std::cout << sc_core::sc_time_stamp() << " Finish item" << std::endl;
       this->finish_item(coApbTransaction);
       this->get_response(coApbTransaction);
-    bool compareResult = (coApbTransaction->prdata ^ exdata) & mask;           
-    if(compareResult == 0){
-        std::ostringstream str;
-            str << "Address: '" << addr.to_string().c_str() << "' Expected data: '"
-                << exdata.to_string().c_str() << "'Actual data: '" << coApbTransaction->prdata.to_string().c_str()
-                << "' Mask: '" << mask.to_string().c_str() << "'";
-        UVM_INFO("TRANSACTION INFO", str.str(), uvm::UVM_MEDIUM);
+
+      std::ostringstream str;
+          str << "Address: '" << addr.to_string().c_str()
+              << "'Read data: '" << coApbTransaction->prdata.to_string().c_str()
+              << "' Mask: '" << mask.to_string().c_str() << "'";
+      UVM_INFO("TRANSACTION INFO", str.str(), uvm::UVM_MEDIUM);
         
-    }
     UVM_INFO(this->get_name(), "Finishing sequence ", uvm::UVM_MEDIUM);
   }
 };
