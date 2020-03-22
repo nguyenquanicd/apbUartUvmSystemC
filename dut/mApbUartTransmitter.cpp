@@ -103,7 +103,6 @@ void mApbUartTransmitter::pcRegisters() {
       // Write pointer out
       txWptr.write(txWptr_w);
       
-      for (j=0; j<16; j++) {
 
       
       wait();
