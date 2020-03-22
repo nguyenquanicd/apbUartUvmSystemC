@@ -174,9 +174,7 @@ class cApbReadSequence : public uvm::uvm_sequence<REQ,RSP>
       std::cout << sc_core::sc_time_stamp() << " Finish item" << std::endl;
       this->finish_item(coApbTransaction);
       this->get_response(coApbTransaction);
-    compareResult = (coApbTransaction->prdata ^ expData) & mask;   
-    std::cout << "Pointer address  " << coApbTransaction << std::endl;
-    std::cout << sc_time_stamp() << " mask " << mask << " compareResult " << compareResult << " Read data " << coApbTransaction->prdata << std::endl;
+    compareResult = (coApbTransaction->prdata ^ expData) & mask;
     if(compareResult){
         std::ostringstream str;
             str << "Address: '" << addr.to_string().c_str() << "' Expected data: '"

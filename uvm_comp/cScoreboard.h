@@ -107,6 +107,7 @@ class cScoreboard : public uvm::uvm_scoreboard
       // Store transmit data to queues when UART is enabled
       // Only store 8 LSB bits, other MSB bits are mapped to 0
 		  else if (TransOnTX.pwrite && (TransOnTX.paddr.range(15,0) == 0xC) && uartEnTX) {
+              std::cout << "Receive transaction from Monitor TX" << std::endl;
 		      queueTransTX.push((TransOnTX.pwdata & 0xff));
 		  }
       //-------------------------------------
@@ -146,6 +147,7 @@ class cScoreboard : public uvm::uvm_scoreboard
   void write_frmMonitorRX(const cApbTransaction& TransOnRX)
   {
     if (rst_flg == 0) {
+        std::cout << "Receive transaction from Monitor RX 1" << TransOnRX.prdata <<std::endl;
       //-------------------------------------
       //Store transmit data to queue
       //-------------------------------------
@@ -163,16 +165,18 @@ class cScoreboard : public uvm::uvm_scoreboard
       //-------------------------------------
       else if (!TransOnRX.pwrite && (TransOnRX.paddr.range(15,0) == 0xC) && uartEnRX) {
 				//Get the transmitted data from queueCompTX
-        queueCompTX = queueTransTX.front();
+        std::cout << "Receive transaction from Monitor RX 2 " << TransOnRX.prdata <<std::endl;
+        queueCompRX = queueTransTX.front();
         //Compare the read data on UART-RX and transmitted data from UART-TX
         //Only compare 8 LSB bits
 		    if ((TransOnRX.prdata & 0xff) == queueCompRX) {
-          sprintf(char_string, "[%s] SUCCESS on UART-RX: transfer data = %02X, queueTransTX size = %d", sc_time_stamp().to_string().c_str(), TransOnRX.prdata, queueTransTX.size());
+          sprintf(char_string, "[%s] SUCCESS on UART-RX: transfer data = %d, queueTransTX size = %d", sc_time_stamp().to_string().c_str(), TransOnRX.prdata, queueTransTX.size());
           info = char_string;
           UVM_INFO("SB INFO", info, uvm::UVM_LOW);
 				} else {
-          sprintf(char_string, "[%s] FAIL on UART-RX: read data = %02X, expected data =%02X, queueTransTX size = %d", sc_time_stamp().to_string().c_str(), TransOnRX.prdata, queueCompTX, queueTransTX.size());
+          sprintf(char_string, "[%s] FAIL on UART-RX: read data = %d, expected data =%d, queueTransTX size = %d", sc_time_stamp().to_string().c_str(), TransOnRX.prdata, queueCompTX, queueTransTX.size());
           error = char_string;
+          std::cout << "Receive transaction from Monitor RX 3 " << TransOnRX.prdata << "--- " << queueCompRX <<std::endl;
 		      UVM_ERROR("SB ERROR", error);
         }
         //Delete queue

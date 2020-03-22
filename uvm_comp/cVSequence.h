@@ -21,14 +21,16 @@ class cApbUartVirSequence: public uvm::uvm_sequence<>
 {
     public:
         cApbWriteSequence<cApbTransaction>* WriteSeq;
-        cApbReadSequence<cApbTransaction>* ReadSeq;
+        cApbReadSequence<cApbTransaction>* ReadSeqTX;
+        cApbReadSequence<cApbTransaction>* ReadSeqRX;
         cApbReadWoCmprSequence<cApbTransaction>* ReadWoComprSeq;
         
         cApbUartVirSequence(const std::string& name = "cApbUartVirSequence") : uvm_sequence<>(name){
         }
         ~cApbUartVirSequence(){
             delete WriteSeq;
-            delete ReadSeq;
+            delete ReadSeqTX;
+            delete ReadSeqRX;
             delete ReadWoComprSeq;
         }       
         UVM_OBJECT_UTILS(cApbUartVirSequence);
@@ -66,7 +68,8 @@ class cApbUartVirSequence: public uvm::uvm_sequence<>
                     break;                    
                 }
             }
-            ApbReadRX(0xC,0xAB,0xFF);  
+            ApbReadRX(0xC,0xAB,0xFF);
+            //ApbReadWoCmprRX(0xC,0xFF);
             wait(100,SC_NS);            
             sc_core::sc_stop();            
         }        

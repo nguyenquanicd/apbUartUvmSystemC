@@ -136,11 +136,15 @@ class cApbMasterMonitor : public uvm::uvm_monitor
   {
     if (psel && penable && pready) {
       //Get APB transaction on APB interface
+      std::cout << this->name() << " Get transaction and forward to scoreboard" <<  std::endl;
       coApbTransaction.paddr  = paddr;
+      std::cout << "coApbTransaction.paddr " << coApbTransaction.paddr << std::endl;      
       coApbTransaction.pstrb  = pstrb; 
       coApbTransaction.pwrite = pwrite;
+      std::cout << "coApbTransaction.pwrite " << coApbTransaction.pwrite << std::endl;
       coApbTransaction.pwdata = pwdata;
       coApbTransaction.prdata = prdata;
+      std::cout << "coApbTransaction.prdata " << coApbTransaction.prdata << std::endl;
       //Send the transaction to analysis port which is connected to Scoreboard
       ap_toScoreboard.write(coApbTransaction);
     }

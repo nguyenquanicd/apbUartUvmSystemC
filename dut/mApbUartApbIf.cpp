@@ -27,26 +27,30 @@ void mApbUartApbIf::pmCombination() {
     bool rxPe_  = rxPe.read(); 
     bool rxFe_  = rxFe.read();
     sc_uint<8> brReg_ = brReg.read();
-    bool dtWe_;
+    bool dtWe_; 
     bool ctrlShiftRxTmp_;
-    //
     bool regWe  = writeEn & regSel & pStrb_all1;
     bool regRe  = ~writeEn & regSel;
     //Write register decoder
     switch (pAddr_lsb.range(4,0)) {
-	    case 0x00: 
+	    case 0x00:
+        dtWe_ = false;        
         conWe = regWe;
         break;
-	    case 0x04: 
+	    case 0x04:
+        dtWe_ = false;
         seWe.write(regWe);
         break;
 	    case 0x08: 
+        dtWe_ = false;
         brWe.write(regWe);
         break;
-	    case 0x0C: 
+	    case 0x0C:
+        dtWe_ = false;
         dtWe_ = regWe;
         break;
-      case 0x10: 
+      case 0x10:
+        dtWe_ = false;
         ieWe.write(regWe);
         break;
 	    default:
@@ -56,10 +60,11 @@ void mApbUartApbIf::pmCombination() {
         dtWe_ = 0;
         ieWe.write(0);
       break;
-	  }
+	  }    
     //
     ctrlTxEn.write(dtWe_);
     if (pAddr_lsb.range(4,0) == 0x0C) {
+       std::cout << "DCMN BUG -------" << regRe << std::endl;
       ctrlDataRd.write(regRe);
     }
     else {

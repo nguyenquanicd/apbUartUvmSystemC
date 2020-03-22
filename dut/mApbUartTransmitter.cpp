@@ -83,7 +83,16 @@ void mApbUartTransmitter::pcRegisters() {
             txRptr.write(txRptr_r);
         }
       
-        // Write pointer
+      // memory of TXFIFO
+      for (j=0; j<16; j++) {
+        if ((txFifoWe_r == 1) && (j == txWptr_w)) { 
+          txMemArray[j].write(ctrlData_r);
+        } else {
+            txMemArray[j].write(txMemArray_r[j]);
+        }
+      }      
+      
+        // Write pointer, moved below memory assignment by Viet
         if (txFifoWe_r == 1) {
           txWptr_w = txWptr_r + 1;
         } else {
@@ -94,14 +103,8 @@ void mApbUartTransmitter::pcRegisters() {
       // Write pointer out
       txWptr.write(txWptr_w);
       
-      // memory of TXFIFO
       for (j=0; j<16; j++) {
-        if ((txFifoWe_r == 1) && (j == txWptr_w)) {
-          txMemArray[j].write(ctrlData_r);
-        } else {
-            txMemArray[j].write(txMemArray_r[j]);
-        }
-      }
+
       
       wait();
     }

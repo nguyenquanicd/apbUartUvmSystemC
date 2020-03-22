@@ -22,11 +22,11 @@
 class cTest : public uvm::uvm_test
 {
     public:
+        UVM_COMPONENT_UTILS(cTest);
         cEnv *coEnv;
         cApbUartVirSequence *coVSequence;
         cTest(uvm::uvm_component_name name) : uvm::uvm_test(name){}
-        UVM_COMPONENT_UTILS(cTest);
-        
+           
         void build_phase(uvm::uvm_phase& phase){
             uvm::uvm_test::build_phase(phase);
             coEnv = cEnv::type_id::create("coEnv",this);
