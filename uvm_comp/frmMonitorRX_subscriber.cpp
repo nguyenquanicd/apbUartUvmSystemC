@@ -26,7 +26,7 @@ void frmMonitorRX_subscriber::write(const cApbTransaction& transaction)
   cScoreboard* coScoreboard;
 
   uvm::uvm_config_db<uvm_object*>::get(this, "", "coScoreboard", obj);
-  std::cout << "frmMonitorRX_subscriber transaction.prdata " << transaction.prdata << std::endl;
+  
   coScoreboard = dynamic_cast<cScoreboard*>(obj);
   coScoreboard->write_frmMonitorRX(transaction);
 }

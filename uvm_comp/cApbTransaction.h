@@ -29,7 +29,7 @@ class cApbTransaction : public uvm::uvm_sequence_item
       virtual bool do_compare(const uvm_object& rhs, const uvm::uvm_comparer*) const {}
     
     public:  
-      unsigned int APB_TRANSACTION_TIMEOUT = 100;
+      static const unsigned int APB_TRANSACTION_TIMEOUT = 100;
       bool         pclk;
       bool         pwrite;
       sc_dt::sc_uint<32>  paddr;
@@ -40,7 +40,7 @@ class cApbTransaction : public uvm::uvm_sequence_item
       bool         apbSeqEn;
       bool         apbConEn;
       unsigned int apbDelay;
-      bool pready = 1;   
+      static const bool pready = 1;   
       
 
     void print_apb_seq(){
@@ -50,3 +50,4 @@ class cApbTransaction : public uvm::uvm_sequence_item
 }; // class cApbTransaction  
 
 #endif /*  CAPBTRANSACTION_H_ */
+
