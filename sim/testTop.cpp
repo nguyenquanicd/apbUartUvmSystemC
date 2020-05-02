@@ -18,9 +18,6 @@
 #include "ifDut.h"
 #include "dut_top.cpp"
 #include "mPeripheral.cpp"
-#include "../uvm_comp/resetfrmTX_subscriber.cpp"
-#include "../uvm_comp/frmMonitorTX_subscriber.cpp"
-#include "../uvm_comp/frmMonitorRX_subscriber.cpp"
 
 ///////
 int sc_main(int, char*[])
