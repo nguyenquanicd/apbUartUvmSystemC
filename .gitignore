@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+sim/run.csh
+sim/sim.log
+sim/run.csh
+sim/sim.log
