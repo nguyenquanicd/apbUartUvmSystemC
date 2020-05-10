@@ -64,7 +64,6 @@ void mApbUartApbIf::pmCombination() {
     //
     ctrlTxEn.write(dtWe_);
     if (pAddr_lsb.range(4,0) == 0x0C) {
-       std::cout << "DCMN BUG -------" << regRe << std::endl;
       ctrlDataRd.write(regRe);
     }
     else {
