@@ -84,13 +84,13 @@ class cApbMasterDriver : public uvm::uvm_driver<REQ>
                 std::cout << "uart_vifApbMaster->pwrite.write(user_req.pwrite) " << user_req.pwrite <<std::endl;                       
                 if(user_req.pwrite){
                     uart_vifApbMaster->pwdata.write(user_req.pwdata);
-                } else {
-                    user_req.prdata = uart_vifApbMaster->prdata.read();
-                    std::cout << "uart_vifApbMaster->prdata.read() " << uart_vifApbMaster->prdata.read() <<std::endl;
-                }
-                
+                }                
                 wait(uart_vifApbMaster->pclk.posedge_event());
                 uart_vifApbMaster->penable.write(1);
+                if(!user_req.pwrite && uart_vifApbMaster->pready) {
+                    user_req.prdata = uart_vifApbMaster->prdata.read();
+                    std::cout << "uart_vifApbMaster->prdata.read() " << uart_vifApbMaster->prdata.read() <<std::endl;
+                }                
                 user_req.pslverr = uart_vifApbMaster->pslverr.read();
                 wait(uart_vifApbMaster->pclk.posedge_event());                
                 if(uart_vifApbMaster->psel && uart_vifApbMaster->penable && uart_vifApbMaster->pready){
